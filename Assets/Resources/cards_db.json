@@ -1,0 +1,459 @@
+{
+  "Info": [
+    {
+      "Cards_Number": 50
+    }
+  ],
+  "Cards": [
+    {
+      "name": "Niebla",
+      "_id": 0,
+      "faction": "Neutral",
+      "type": "Clima",
+      "power": null,
+      "row": null,
+      "effect": 3
+    },
+    {
+      "name": "Niebla",
+      "_id": 1,
+      "faction": "Neutral",
+      "type": "Clima",
+      "power": null,
+      "row": null,
+      "effect": 3
+    },
+    {
+      "name": "Tormenta Nórdica",
+      "_id": 2,
+      "faction": "Neutral",
+      "type": "Clima",
+      "power": null,
+      "row": null,
+      "effect": 2
+    },
+    {
+      "name": "Tormenta Nórdica",
+      "_id": 3,
+      "faction": "Neutral",
+      "type": "Clima",
+      "power": null,
+      "row": null,
+      "effect": 2
+    },
+    {
+      "name": "Odin",
+      "_id": 4,
+      "faction": "Vikings",
+      "type": "Aumento",
+      "power": null,
+      "row": "all",
+      "effect": 0
+    },
+    {
+      "name": "Ivar the Boneless",
+      "_id": 5,
+      "faction": "Vikings",
+      "type": "Oro",
+      "power": 6,
+      "row": "range",
+      "effect": 8
+    },
+    {
+      "name": "Lagertha, la Guerrera Escudo",
+      "_id": 6,
+      "faction": "Vikings",
+      "type": "Oro",
+      "power": 7,
+      "row": "close_range",
+      "effect": 6
+    },
+    {
+      "name": "Rollo, el Berserker",
+      "_id": 7,
+      "faction": "Vikings",
+      "type": "Oro",
+      "power": 8,
+      "row": "close",
+      "effect": 9
+    },
+    {
+      "name": "Thor",
+      "_id": 8,
+      "faction": "Vikings",
+      "type": "Aumento",
+      "power": null,
+      "row": "all",
+      "effect": 1
+    },
+    {
+      "name": "Ragnar Lothbrok",
+      "_id": 9,
+      "faction": "Vikings",
+      "type": "Lider",
+      "power": null,
+      "row": "Lider",
+      "effect": 5
+    },
+    {
+      "name": "Ragnarok",
+      "_id": 10,
+      "faction": "Vikings",
+      "type": "Despeje",
+      "power": null,
+      "row": null,
+      "effect": 4
+    },
+    {
+      "name": "Bjorn Ironside",
+      "_id": 11,
+      "faction": "Vikings",
+      "type": "Oro",
+      "power": 6,
+      "row": "close",
+      "effect": 7
+    },
+    {
+      "name": "Floki, el Constructor",
+      "_id": 12,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 10
+    },
+    {
+      "name": "Floki, el Constructor",
+      "_id": 13,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 10
+    },
+    {
+      "name": "Valhalla",
+      "_id": 14,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 11
+    },
+    {
+      "name": "Valhalla",
+      "_id": 15,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 11
+    },
+    {
+      "name": "Valhalla",
+      "_id": 16,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 11
+    },
+    {
+      "name": "Cuervo",
+      "_id": 17,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 2,
+      "row": "",
+      "effect": 6
+    },
+    {
+      "name": "Cuervo",
+      "_id": 18,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 2,
+      "row": "",
+      "effect": 6
+    },
+    {
+      "name": "Cuervo",
+      "_id": 19,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 2,
+      "row": "",
+      "effect": 6
+    },
+    {
+      "name": "Soldado Distractor",
+      "_id": 20,
+      "faction": "Vikings",
+      "type": "Señuelo",
+      "power": 0,
+      "row": "all",
+      "effect": 14
+    },
+    {
+      "name": "Ariete Nórdico",
+      "_id": 21,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 1,
+      "row": "siege",
+      "effect": 13
+    },
+    {
+      "name": "Ariete Nórdico",
+      "_id": 22,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 1,
+      "row": "siege",
+      "effect": 13
+    },
+    {
+      "name": "Ariete Nórdico",
+      "_id": 23,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 1,
+      "row": "siege",
+      "effect": 13
+    },
+    {
+      "name": "Catapulta Vikinga",
+      "_id": 24,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 4,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Catapulta Vikinga",
+      "_id": 25,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 4,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Catapulta Vikinga",
+      "_id": 26,
+      "faction": "Vikings",
+      "type": "Plata",
+      "power": 4,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Uhtred de Bebbanburg",
+      "_id": 27,
+      "faction": "Last Kingdom",
+      "type": "Lider",
+      "power": null,
+      "row": "Lider",
+      "effect": 8
+    },
+    {
+      "name": "Alfred el Grande",
+      "_id": 28,
+      "faction": "Last Kingdom",
+      "type": "Oro",
+      "power": 8,
+      "row": "close_range",
+      "effect": 9
+    },
+    {
+      "name": "Aethelflaed",
+      "_id": 29,
+      "faction": "Last Kingdom",
+      "type": "Oro",
+      "power": 7,
+      "row": "close_range",
+      "effect": 5
+    },
+    {
+      "name": "Beocca",
+      "_id": 30,
+      "faction": "Last Kingdom",
+      "type": "Aumento",
+      "power": null,
+      "row": "all",
+      "effect": 0
+    },
+    {
+      "name": "Dios Cristiano",
+      "_id": 31,
+      "faction": "Last Kingdom",
+      "type": "Aumento",
+      "power": null,
+      "row": "all",
+      "effect": 1
+    },
+    {
+      "name": "Iglesia Cristiana de Wessex",
+      "_id": 32,
+      "faction": "Last Kingdom",
+      "type": "Despeje",
+      "power": null,
+      "row": null,
+      "effect": 4
+    },
+    {
+      "name": "Leofric",
+      "_id": 33,
+      "faction": "Last Kingdom",
+      "type": "Oro",
+      "power": 6,
+      "row": "close",
+      "effect": 6
+    },
+    {
+      "name": "Finan",
+      "_id": 34,
+      "faction": "Last Kingdom",
+      "type": "Oro",
+      "power": 6,
+      "row": "close",
+      "effect": 7
+    },
+    {
+      "name": "Sihtric",
+      "_id": 35,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 10
+    },
+    {
+      "name": "Sihtric",
+      "_id": 36,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 10
+    },
+    {
+      "name": "Steapa",
+      "_id": 37,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 11
+    },
+    {
+      "name": "Steapa",
+      "_id": 38,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 11
+    },
+    {
+      "name": "Steapa",
+      "_id": 39,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 4,
+      "row": "close",
+      "effect": 11
+    },
+    {
+      "name": "Sigtryggr & Stiorra",
+      "_id": 40,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 2,
+      "row": "close_range",
+      "effect": 6
+    },
+    {
+      "name": "Sigtryggr & Stiorra",
+      "_id": 41,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 2,
+      "row": "close_range",
+      "effect": 6
+    },
+    {
+      "name": "Sigtryggr & Stiorra",
+      "_id": 42,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 2,
+      "row": "close_range",
+      "effect": 6
+    },
+    {
+      "name": "Ballesta Gigante",
+      "_id": 43,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Ballesta Gigante",
+      "_id": 44,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Ballesta Gigante",
+      "_id": 45,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 3,
+      "row": "siege",
+      "effect": 12
+    },
+    {
+      "name": "Aluvión de Flechas",
+      "_id": 46,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 1,
+      "row": "range",
+      "effect": 13
+    },
+    {
+      "name": "Aluvión de Flechas",
+      "_id": 47,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 1,
+      "row": "range",
+      "effect": 13
+    },
+    {
+      "name": "Aluvión de Flechas",
+      "_id": 48,
+      "faction": "Last Kingdom",
+      "type": "Plata",
+      "power": 1,
+      "row": "range",
+      "effect": 13
+    },
+    {
+      "name": " Halcón Mensajero",
+      "_id": 49,
+      "faction": "Last Kingdom",
+      "type": "Señuelo",
+      "power": 0,
+      "row": "all",
+      "effect": 14
+    }
+  ]
+}
