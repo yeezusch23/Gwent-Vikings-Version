@@ -6,7 +6,8 @@ using TMPro;
 using UnityEditor;
 using System.Collections.Generic;
 
-public enum GameState { PLAYER1, PLAYER2, ROUND }
+public enum GameState { PLAYER1, PLAYER2 }
+public enum RoundState {ROUND1, ROUND2, ROUND3}
 
 public class StartGame : MonoBehaviour
 {   
@@ -32,6 +33,11 @@ public class StartGame : MonoBehaviour
 
     void Start () 
     {   
+        
+    }
+
+    void InitGame()
+    {
         InitVikingsDeck();
         InitLastKingdomDeck();
         for(int i = 0; i < 10; i++)
