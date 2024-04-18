@@ -31,6 +31,26 @@ public class StartGame : MonoBehaviour
 
     public GameObject selectedCard;
 
+    //Vikings Stats
+    public GameObject powerVikings;
+    public GameObject closePowerVikings;
+    public GameObject rangePowerVikings;
+    public GameObject siegePowerVikings;
+    public GameObject cardsHandVikings;
+    public GameObject cardsDeckVikings;
+    public GameObject gemsVikings;
+
+    //Last Kingdom Stats
+    public GameObject powerLastKingdom;
+    public GameObject closePowerLastKingdom;
+    public GameObject rangePowerLastKingdom;
+    public GameObject siegePowerLastKingdom;
+    public GameObject cardsHandLastKingdom;
+    public GameObject cardsDeckLastKingdom;
+    public GameObject gemsLastKingdom;
+
+    Player PLAYER1;
+    Player PLAYER2;
     void Start () 
     {   
         InitGame();
@@ -38,8 +58,41 @@ public class StartGame : MonoBehaviour
 
     }
 
-    void InitGame()
+    public void ActiveEffect(Transform card)
     {
+        Function_1(card);
+        // Debug.Log("Active");
+    }
+
+    void Function_1(Transform card)
+    {   
+        int sum = 0;
+        int childs = card.parent.transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {
+            Transform child = card.parent.transform.Find("row").GetChild(i);
+            child.transform.Find("Stats").GetComponent<CardStats>().power += 2;
+            child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+            sum += child.transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        if(gameState == GameState.PLAYER1){
+            if(card.parent.name == "close")
+                closePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+            if(card.parent.name == "range")
+                rangePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        }else{
+            if(card.parent.name == "close")
+                closePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+            if(card.parent.name == "range")
+                rangePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        }
+    }
+
+
+    void InitGame()
+    {   
+        PLAYER1 = new Player();
+        PLAYER2 = new Player();
         InitVikingsDeck();
         InitLastKingdomDeck();
         for(int i = 0; i < 10; i++)

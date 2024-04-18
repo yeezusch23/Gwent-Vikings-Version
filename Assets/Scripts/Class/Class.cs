@@ -82,3 +82,26 @@ public class EffectList
         effects.Add(effect);
     }
 }
+
+[System.Serializable]
+public class Player
+{
+    public int power { get; set; }
+    public int closePower { get; set; }
+    public int rangePower { get; set; }
+    public int siegePower { get; set; }
+    public int cardsHand { get; set; }
+    public int cardsDeck { get; set; }
+    public int gems { get; set; }
+
+    public Player()
+    {
+        power = 0;
+        closePower = 0;
+        rangePower = 0;
+        siegePower = 0;
+        cardsHand = 10;
+        cardsDeck = 14;
+        gems = 2;
+    }
+}
