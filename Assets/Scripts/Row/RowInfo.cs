@@ -12,6 +12,9 @@ public class RowInfo : MonoBehaviour
     public Sprite siegeSelected;
     public Sprite specialSelected;
 
+    public Sprite clima;
+    public Sprite climaSelected;
+
     
     // public Sprite orangeCircle;
     // public Sprite blueCircle;

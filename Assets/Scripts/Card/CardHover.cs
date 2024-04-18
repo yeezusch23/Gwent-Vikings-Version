@@ -62,20 +62,29 @@ public class CardHover : MonoBehaviour
       public void OnHoverEnter()
     {   
         ShowInfo();
-        if (cardActive && !cardTop)
+        // Debug.Log("ENTER    cardActive: " + cardActive + " cardTop:" + cardTop);
+        if(gameObject != controller.selectedCard)
         {
-            TranslateUp();
-        }
-        //Debug.Log("Hover Enter");
+            if (cardActive && !cardTop)
+            {   
+                TranslateUp();
+            }
+        } 
+        
     }
 
     public void OnHoverExit()
     {   
         DisableShowCard();
-        if (cardActive && cardTop && controller.selectedCard != gameObject)
+        if(gameObject != controller.selectedCard)
         {
-            TranslateDown();
+            if (cardActive && cardTop)
+            {
+                TranslateDown();
+            }
         }
+        
+        // Debug.Log("EXIT   cardActive: " + cardActive + " cardTop:" + cardTop);
         //Debug.Log("Hover Exit");
     }
 

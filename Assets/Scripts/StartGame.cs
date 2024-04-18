@@ -71,7 +71,9 @@ public class StartGame : MonoBehaviour
         playerField.transform.Find("range").Find("row").GetComponent<Image>().sprite = rowSprite;
         rowSprite = playerField.GetComponent<RowInfo>().siege;
         playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = rowSprite;
-
+        
+        Sprite spriteClima = playerField.GetComponent<RowInfo>().clima;
+        climaField.GetComponent<Image>().sprite = spriteClima;
         // Light off the weather board and deselect weather card
         // climaField.GetComponent<Image>().sprite = climaField.GetComponent<WeatherManager>().weather;
         // climaField.GetComponent<WeatherManager>().isWeatherCard = false;
