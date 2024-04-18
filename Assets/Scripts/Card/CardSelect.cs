@@ -25,38 +25,41 @@ public class CardSelect : MonoBehaviour
 
     public void OnCardSelect()
     {   
-        if(controller.selectedCard == null)
+        if(isSelectable)
         {
-            controller.selectedCard = gameObject;
-            if(!controller.selectedCard.transform.GetComponent<CardHover>().cardTop)
+            if(controller.selectedCard == null)
             {
-                controller.selectedCard.transform.Translate(0, 30, 0);
+                controller.selectedCard = gameObject;
+                if(!controller.selectedCard.transform.GetComponent<CardHover>().cardTop)
+                {
+                    controller.selectedCard.transform.Translate(0, 30, 0);
+                }
+                controller.selectedCard.transform.GetComponent<CardHover>().cardTop = true;
+            } else if (controller.selectedCard == gameObject)
+            {   
+                controller.selectedCard.transform.GetComponent<CardHover>().cardTop = false;
+                controller.selectedCard.transform.Translate(0, -30, 0);
+                controller.selectedCard = null;
+            } else 
+            {
+                controller.selectedCard.transform.GetComponent<CardHover>().cardTop = false;
+                controller.selectedCard.transform.Translate(0, -30, 0);
+                controller.selectedCard = gameObject;
             }
-            controller.selectedCard.transform.GetComponent<CardHover>().cardTop = true;
-        } else if (controller.selectedCard == gameObject)
-        {   
-            controller.selectedCard.transform.GetComponent<CardHover>().cardTop = false;
-            controller.selectedCard.transform.Translate(0, -30, 0);
-            controller.selectedCard = null;
-        } else 
-        {
-            controller.selectedCard.transform.GetComponent<CardHover>().cardTop = false;
-            controller.selectedCard.transform.Translate(0, -30, 0);
-            controller.selectedCard = gameObject;
-        }
 
-        if(controller.selectedCard == null)
-        {
-            controller.ResetField(1);
-            controller.ResetField(2);
-        } 
-        else if(controller.gameState == GameState.PLAYER1)
-        {
-            controller.ResetField(1);
-            ActivatedField(1);
-        } else {
-            controller.ResetField(2);
-            ActivatedField(2);
+            if(controller.selectedCard == null)
+            {
+                controller.ResetField(1);
+                controller.ResetField(2);
+            } 
+            else if(controller.gameState == GameState.PLAYER1)
+            {
+                controller.ResetField(1);
+                ActivatedField(1);
+            } else {
+                controller.ResetField(2);
+                ActivatedField(2);
+            }
         }
     }
 

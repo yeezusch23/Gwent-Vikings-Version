@@ -28,18 +28,27 @@ public class RowClick : MonoBehaviour
             if((transform.parent.parent.name == "Player1" && card.faction == "Vikings") || (transform.parent.parent.name == "Player2" && card.faction == "Last Kingdom"))
             {
                 if (transform.parent.name == card.row)
-                {
-                    controller.selectedCard.transform.SetParent(transform.parent, false); 
+                {   
+                    controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
+                    controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;
+                    controller.selectedCard.transform.SetParent(transform, false); 
+                    controller.selectedCard = null;
                 } else if (card.row == "close_range" && (transform.parent.name == "close" || transform.parent.name == "range"))
-                {
-                    controller.selectedCard.transform.SetParent(transform.parent, false); 
+                {   
+                    controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
+                    controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;
+                    controller.selectedCard.transform.SetParent(transform, false);
+                    controller.selectedCard = null; 
                 } else if (card.row == "all")
                 {
-                    controller.selectedCard.transform.SetParent(transform.parent, false); 
+                    controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
+                    controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;
+                    controller.selectedCard.transform.SetParent(transform, false); 
+                    controller.selectedCard = null;
                 }
-            }
-                
-            // controller.selectedCard.transform.SetParent(transform.parent, false);
+                controller.ResetField(1);
+                controller.ResetField(2);
+            } 
             
         }
     }
