@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -86,7 +87,7 @@ public class CardSelect : MonoBehaviour
             playerField.transform.Find("close").Find("special").GetComponent<Image>().sprite = spriteSpecial;
             playerField.transform.Find("range").Find("special").GetComponent<Image>().sprite = spriteSpecial;
             playerField.transform.Find("siege").Find("special").GetComponent<Image>().sprite = spriteSpecial;
-        } else if (card.row == "Señuelo" || card.row == "all")
+        } else if (card.row == "all")
         {   
             playerField.transform.Find("close").Find("row").GetComponent<Image>().sprite = spriteClose;
             playerField.transform.Find("range").Find("row").GetComponent<Image>().sprite = spriteRange;   
@@ -104,6 +105,7 @@ public class CardSelect : MonoBehaviour
         {
             playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = spriteSiege;   
         }
+
     }
 
 }

@@ -79,7 +79,6 @@ public class StartGame : MonoBehaviour
         // climaField.GetComponent<WeatherManager>().isWeatherCard = false;
     }
 
-
     void InstantiateCard (Card card, string faction) 
     {
         GameObject instantiateCard = Instantiate(cardPrefab);
@@ -171,7 +170,7 @@ public class StartGame : MonoBehaviour
         vikingsDeck.AddCard(new Card("Cuervo", 17, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 18, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 19, "Vikings", "Plata", 2, "range", 6));
-        vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "Señuelo", 0, "", 14));
+        vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "all", 0, "", 14));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 21, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 22, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 23, "Vikings", "Plata", 1, "siege", 13));
@@ -206,7 +205,7 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 46, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 47, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 48, "Last Kingdom", "Plata", 1, "range", 13));
-        lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "Señuelo", 0, "all", 14));
+        lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "all", 0, "all", 14));
         lastKingdomDeck.Shuffle();
     }
 
