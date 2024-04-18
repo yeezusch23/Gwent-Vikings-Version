@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
+using System.Collections.Generic;
+
+public enum GameState { START, PLAYER1, PLAYER2, ROUNDOVER, WON, LOST, DRAW }
 
 public class StartGame : MonoBehaviour
 {   
@@ -15,6 +18,17 @@ public class StartGame : MonoBehaviour
 
     public GameObject handVikingsCount;
     public GameObject handLastKingdomCount;
+
+    public GameObject showCard;
+
+    public GameState gameState;
+
+    public GameObject player1;
+    public GameObject player2;
+
+    public GameObject climaField;
+
+    public GameObject selectedCard;
 
     void Start () 
     {   
@@ -31,6 +45,39 @@ public class StartGame : MonoBehaviour
             lastKingdomDeck.RemoveCard(i);
         }
     }
+    public void LightoffField(int player) // Playdown (!Highligh) is misleading
+    {
+        GameObject playerField;
+        if (player == 1)
+        {
+            playerField = player1;
+        } else
+        {
+            playerField = player2;
+        }
+        // Reiniciando todos los campos
+        playerField.GetComponent<RowInfo>().Reset();
+
+        // Restaurando los special Sprites de los campos, Tambien se puede usar la variante Resources.Load<Sprite>("path");
+        Sprite specialSprite = playerField.GetComponent<RowInfo>().special;
+        playerField.transform.Find("close").Find("special").GetComponent<Image>().sprite = specialSprite;
+        playerField.transform.Find("range").Find("special").GetComponent<Image>().sprite = specialSprite;
+        playerField.transform.Find("siege").Find("special").GetComponent<Image>().sprite = specialSprite;
+
+        // Restaurando las rows de los campos, Tambien se puede usar la variante Resources.Load<Sprite>("path");
+        Sprite rowSprite = playerField.GetComponent<RowInfo>().close;
+        playerField.transform.Find("close").Find("row").GetComponent<Image>().sprite = rowSprite;
+        rowSprite = playerField.GetComponent<RowInfo>().range;
+        playerField.transform.Find("range").Find("row").GetComponent<Image>().sprite = rowSprite;
+        rowSprite = playerField.GetComponent<RowInfo>().siege;
+        playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = rowSprite;
+
+        // Light off the weather board and deselect weather card
+        // climaField.GetComponent<Image>().sprite = climaField.GetComponent<WeatherManager>().weather;
+        // climaField.GetComponent<WeatherManager>().isWeatherCard = false;
+    }
+
+
     void InstantiateCard (Card card, string faction) 
     {
         GameObject instantiateCard = Instantiate(cardPrefab);
@@ -77,13 +124,16 @@ public class StartGame : MonoBehaviour
         } else if (card.row == "siege") 
         {
             instantiateCard.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/siege");
-        } else if (card.row == "close_siege")
+        } else if (card.row == "close_range")
         {
             instantiateCard.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/close_range");
         } else 
         {
             Destroy(instantiateCard.transform.Find("Row").GetComponent<Image>());
         }
+        
+        instantiateCard.GetComponent<CardSelect>().isSelectable = true;
+
         //Agrgando el objeto a la escena
         if (faction == "Vikings")
         {
@@ -157,4 +207,6 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "Señuelo", 0, "all", 14));
         lastKingdomDeck.Shuffle();
     }
+
+
 }
