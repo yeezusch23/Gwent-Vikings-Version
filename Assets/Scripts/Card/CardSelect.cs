@@ -16,7 +16,20 @@ public class CardSelect : MonoBehaviour
     }
 
     public void OnCardSelect()
-    {
+    {   
+        if(controller.selectedCard != null)
+        {
+            controller.selectedCard.transform.Translate(0, -30, 0);
+        } 
+
+        if(controller.selectedCard == null)
+            controller.selectedCard = gameObject;
+        else
+        {
+        controller.selectedCard = gameObject;
+        gameObject.transform.Translate(0, 30, 0);
+        }
+        
         if (isSelectable)
         {   
             // If the turn is the player's and the card is his, hence the Tag
