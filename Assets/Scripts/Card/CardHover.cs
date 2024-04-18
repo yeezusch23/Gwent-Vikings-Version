@@ -19,6 +19,7 @@ public class CardHover : MonoBehaviour
     public bool cardActive = true;
     public bool cardTop = false;
 
+    public bool isHoverable = true;
     public GameObject showCard;
 
     public EffectList effectList;
@@ -61,7 +62,8 @@ public class CardHover : MonoBehaviour
     }
       public void OnHoverEnter()
     {   
-        ShowInfo();
+        if(isHoverable)
+            ShowInfo();
         // Debug.Log("ENTER    cardActive: " + cardActive + " cardTop:" + cardTop);
         if(gameObject != controller.selectedCard)
         {

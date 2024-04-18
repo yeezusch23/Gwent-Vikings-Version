@@ -33,7 +33,9 @@ public class StartGame : MonoBehaviour
 
     void Start () 
     {   
-        
+        InitGame();
+
+
     }
 
     void InitGame()
@@ -50,6 +52,7 @@ public class StartGame : MonoBehaviour
             InstantiateCard(lastKingdomDeck.cards[i], "Last Kingdom");
             lastKingdomDeck.RemoveCard(i);
         }
+
     }
     public void ResetField(int player) 
     {
@@ -138,17 +141,24 @@ public class StartGame : MonoBehaviour
         {
             Destroy(instantiateCard.transform.Find("Row").GetComponent<Image>());
         }
+        //Back
+        if (faction != "Vikings")
+        {
+            instantiateCard.transform.Find("Back").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/backLastKingdomCard");
+            instantiateCard.transform.Find("Back").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+        }
         
-        instantiateCard.GetComponent<CardSelect>().isSelectable = true;
-
+        
         //Agrgando el objeto a la escena
         if (faction == "Vikings")
         {
             instantiateCard.transform.SetParent(handVikings.transform, false);
+            instantiateCard.transform.GetComponent<CardSelect>().isSelectable = true;
         } else
         {
             instantiateCard.transform.Rotate(0, 0, 180);
             instantiateCard.transform.SetParent(handLastKingdom.transform, false);
+            instantiateCard.transform.GetComponent<CardHover>().isHoverable = false;
         }
         // Debug.Log(card.name);
     }

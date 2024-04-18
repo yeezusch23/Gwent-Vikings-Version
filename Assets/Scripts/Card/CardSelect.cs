@@ -10,7 +10,7 @@ public class CardSelect : MonoBehaviour
     [HideInInspector]
     public StartGame controller;
 
-    public bool isSelectable;
+    public bool isSelectable = true;
 
     public GameObject player1Field;
     public GameObject player2Field;

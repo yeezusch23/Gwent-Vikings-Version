@@ -11,7 +11,7 @@ public class RowClick : MonoBehaviour
     [HideInInspector]
     public StartGame controller;
     // Start is called before the first frame update
-    public GameObject cardPrefab;
+    // public GameObject cardPrefab;
     UnityEvent unityEvent;
     void Start()
     {   
