@@ -6,7 +6,7 @@ using TMPro;
 using UnityEditor;
 using System.Collections.Generic;
 
-public enum GameState { START, PLAYER1, PLAYER2, ROUNDOVER, WON, LOST, DRAW }
+public enum GameState { PLAYER1, PLAYER2, ROUND }
 
 public class StartGame : MonoBehaviour
 {   
@@ -45,7 +45,7 @@ public class StartGame : MonoBehaviour
             lastKingdomDeck.RemoveCard(i);
         }
     }
-    public void LightoffField(int player) // Playdown (!Highligh) is misleading
+    public void ResetField(int player) 
     {
         GameObject playerField;
         if (player == 1)

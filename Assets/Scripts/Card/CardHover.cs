@@ -62,7 +62,7 @@ public class CardHover : MonoBehaviour
       public void OnHoverEnter()
     {   
         ShowInfo();
-        if (cardActive && !cardTop && controller.selectedCard == null)
+        if (cardActive && !cardTop)
         {
             TranslateUp();
         }
