@@ -78,7 +78,7 @@ public class StartGame : MonoBehaviour
         if(n == 0)
             AddPowerRow(row, 2);
         if(n == 1)
-            AddPowerRow(row, 2);
+            AddPowerRow(row, 1);
         if(n == 2)
             ReducePowerRow("close", -1);
         if(n == 3)
@@ -92,7 +92,14 @@ public class StartGame : MonoBehaviour
             DeletCard(row, 1);
         if(n == 9)
             DeletCard(row, 2);
+        // if(n == 10)
+            // AddPowerCardLeft(row);
     }
+
+    // void AddPowerCardLeft()
+    // {
+
+    // }
 
     void DeletCard(Transform row, int op)
     {   
@@ -311,6 +318,14 @@ public class StartGame : MonoBehaviour
             if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += cnt;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {
+            if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
+            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardVikings.transform, false);
+        }else{
+            if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
+            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardLastkingDom.transform, false);
         }
         UpdateStats();
     }
