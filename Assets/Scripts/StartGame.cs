@@ -5,8 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
-public enum GameState { PLAYER1, PLAYER2 }
+public enum GameState { PLAYER1, PLAYER2, PLAYER1PASS, PLAYER2PASS }
 public enum RoundState {ROUND1, ROUND2, ROUND3}
 
 public class StartGame : MonoBehaviour
@@ -49,11 +50,17 @@ public class StartGame : MonoBehaviour
     public GameObject cardsDeckLastKingdom;
     public GameObject gemsLastKingdom;
 
+    //Buttons
+    public GameObject button1;
+    public GameObject button2;
+
+
     Player PLAYER1;
     Player PLAYER2;
     void Start () 
     {   
         InitGame();
+
 
 
     }
@@ -74,21 +81,11 @@ public class StartGame : MonoBehaviour
         for(int i = 0; i < childs; i++)
         {
             Transform child = card.parent.transform.Find("row").GetChild(i);
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += 2;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
             sum += child.transform.Find("Stats").GetComponent<CardStats>().power;
         }
-        // if(gameState == GameState.PLAYER1){
-        //     if(card.parent.name == "close")
-        //         closePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        //     if(card.parent.name == "range")
-        //         rangePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        // }else{
-        //     if(card.parent.name == "close")
-        //         closePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        //     if(card.parent.name == "range")
-        //         rangePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        // }
         UpdateStats();
     }
 
@@ -162,6 +159,36 @@ public class StartGame : MonoBehaviour
         //Deck
         player2.transform.Find("Deck").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = lastKingdomDeck.cards.Count.ToString();
         
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {
+            for(int i = 0; i < player1.transform.Find("hand").childCount; i++)
+            {
+                player1.transform.Find("hand").GetChild(i).transform.GetComponent<CardSelect>().isSelectable = true;
+                player1.transform.Find("hand").GetChild(i).transform.GetComponent<CardHover>().isHoverable = true;
+                player1.transform.Find("hand").GetChild(i).Find("Back").transform.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+            } 
+            for(int i = 0; i < player2.transform.Find("hand").childCount; i++)
+            {
+                player2.transform.Find("hand").GetChild(i).transform.GetComponent<CardSelect>().isSelectable = false;
+                player2.transform.Find("hand").GetChild(i).transform.GetComponent<CardHover>().isHoverable = false;
+                player2.transform.Find("hand").GetChild(i).Find("Back").transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            }
+        } 
+        if(gameState == GameState.PLAYER2 || gameState == GameState.PLAYER1PASS)
+        {
+            for(int i = 0; i < player1.transform.Find("hand").childCount; i++)
+            {
+                player1.transform.Find("hand").GetChild(i).transform.GetComponent<CardSelect>().isSelectable = false;
+                player1.transform.Find("hand").GetChild(i).transform.GetComponent<CardHover>().isHoverable = false;
+                player1.transform.Find("hand").GetChild(i).Find("Back").transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            } 
+            for(int i = 0; i < player2.transform.Find("hand").childCount; i++)
+            {
+                player2.transform.Find("hand").GetChild(i).transform.GetComponent<CardSelect>().isSelectable = true;
+                player2.transform.Find("hand").GetChild(i).transform.GetComponent<CardHover>().isHoverable = true;
+                player2.transform.Find("hand").GetChild(i).Find("Back").transform.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+            }
+        }
     }
     void InitGame()
     {   

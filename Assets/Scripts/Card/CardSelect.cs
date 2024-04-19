@@ -52,11 +52,11 @@ public class CardSelect : MonoBehaviour
                 controller.ResetField(1);
                 controller.ResetField(2);
             } 
-            else if(controller.gameState == GameState.PLAYER1)
+            else if(controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2PASS)
             {
                 controller.ResetField(1);
                 ActivatedField(1);
-            } else {
+            } else if(controller.gameState == GameState.PLAYER2 || controller.gameState == GameState.PLAYER1PASS) {
                 controller.ResetField(2);
                 ActivatedField(2);
             }
