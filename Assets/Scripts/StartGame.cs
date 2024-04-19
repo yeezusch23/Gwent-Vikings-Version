@@ -40,6 +40,7 @@ public class StartGame : MonoBehaviour
     public GameObject cardsHandVikings;
     public GameObject cardsDeckVikings;
     public GameObject gemsVikings;
+    public GameObject discardVikings;
 
     //Last Kingdom Stats
     public GameObject powerLastKingdom;
@@ -49,6 +50,7 @@ public class StartGame : MonoBehaviour
     public GameObject cardsHandLastKingdom;
     public GameObject cardsDeckLastKingdom;
     public GameObject gemsLastKingdom;
+    public GameObject discardLastkingDom;
 
     //Buttons
     public GameObject button1;
@@ -64,33 +66,106 @@ public class StartGame : MonoBehaviour
 
 
     }
-
-    public void ActiveEffect(Transform card)
+    
+    // public void UpdateEffects(Transform row)
+    // {   
+    //     Transform card = row.transform.GetChild(row.transform.childCount - 1);
+    // }
+    public void ActiveEffect(Transform row)
     {   
         // Debug.Log(card.transform.GetChild(card.transform.childCount-1).name);
-        int n = card.transform.GetChild(card.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
+        int n = row.transform.GetChild(row.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
         if(n == 0)
-            Function_0(card);
-        // Debug.Log("Active");
+            AddPowerRow(row, 2);
+        if(n == 1)
+            AddPowerRow(row, 2);
+        if(n == 2)
+            ReducePowerRow("close", -1);
+        if(n == 3)
+            ReducePowerRow("range", -1);
+        if(n == 4)
+            DeletClimas(row, 1);
+        // if(n == 5)
+        if(n == 6)
+            GetCardOfDeck(row);
     }
 
-    void Function_0(Transform card)
+    void GetCardOfDeck(Transform row)
+    {
+        
+    }
+
+    void DeletClimas(Transform row, int add)
     {   
-        int sum = 0;
-        int childs = card.parent.transform.Find("row").childCount;
+        Debug.Log("COUNT: " + row.transform.name);
+        int childs = climaField.transform.childCount;
+        for(int i = 0; i < childs; i++)
+        {    
+            // Debug.Log(i);
+            int n = climaField.transform.GetChild(0).Find("Stats").GetComponent<CardStats>().effect; 
+            if(n == 2)
+                ReducePowerRow("close", 1);
+            else
+                ReducePowerRow("range", 1);
+            
+            if(climaField.transform.GetChild(0).rotation.z == 0){
+                if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
+                climaField.transform.GetChild(0).transform.SetParent(discardVikings.transform, false);
+            }
+            else
+            {   
+                if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
+                climaField.transform.GetChild(0).transform.SetParent(discardLastkingDom.transform, false);
+            }
+        }
+        if(row.transform.GetChild(row.transform.childCount-1).transform.Find("Stats").GetComponent<CardStats>().faction == "Vikings")
+        {
+            if(row.transform.childCount != 0) Destroy(row.transform.GetChild(0).gameObject);
+            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardVikings.transform, false);
+        }else{
+            if(row.transform.childCount != 0) Destroy(row.transform.GetChild(0).gameObject);
+            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardLastkingDom.transform, false);
+        }
+    }
+
+    void ReducePowerRow(string rowType, int add)
+    {
+        int childs = player1.transform.Find(rowType).transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {   
+            Transform child = player1.transform.Find(rowType).transform.Find("row").GetChild(i);
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro" || child.transform.Find("Stats").GetComponent<CardStats>().type == "Despeje") continue;
+            child.transform.Find("Stats").GetComponent<CardStats>().power += add;
+            child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        childs = player2.transform.Find(rowType).transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {   
+            Transform child = player2.transform.Find(rowType).transform.Find("row").GetChild(i);
+            Debug.Log(child.transform.name);
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro" || child.transform.Find("Stats").GetComponent<CardStats>().type == "Despeje") continue;
+            child.transform.Find("Stats").GetComponent<CardStats>().power += add;
+            child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        UpdateStats();
+    }
+    void AddPowerRow(Transform row, int cnt)
+    {   
+        int childs = row.parent.transform.Find("row").childCount;
         for(int i = 0; i < childs; i++)
         {
-            Transform child = card.parent.transform.Find("row").GetChild(i);
+            Transform child = row.parent.transform.Find("row").GetChild(i);
             if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
-            child.transform.Find("Stats").GetComponent<CardStats>().power += 2;
+            child.transform.Find("Stats").GetComponent<CardStats>().power += cnt;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
-            sum += child.transform.Find("Stats").GetComponent<CardStats>().power;
         }
         UpdateStats();
     }
 
     public void UpdateStats()
     {   
+        ResetField(1);
+        ResetField(2);
         int sum, power = 0;
         //Vikings
         //close
@@ -378,6 +453,5 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "all", 0, "all", 14));
         lastKingdomDeck.Shuffle();
     }
-
 
 }

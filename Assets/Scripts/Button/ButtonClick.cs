@@ -21,10 +21,16 @@ public class ButtonClick : MonoBehaviour
 
     public void OnButtonClick()
     {   
-        Debug.Log("entra");
+        if(controller.selectedCard != null) 
+        {   
+            controller.selectedCard.transform.GetComponent<CardHover>().cardTop = false;
+            controller.selectedCard.transform.Translate(0, -30, 0);
+            controller.selectedCard = null;
+        }
+        // Debug.Log("entra");
         if(transform.name == "Button1" && controller.gameState == GameState.PLAYER1)
         {   
-            Debug.Log(1);
+            // Debug.Log(1);
             controller.gameState = GameState.PLAYER2;
             controller.button1.GetComponent<ButtonHover>().isHoverable = false;
             controller.button2.GetComponent<ButtonHover>().isHoverable = true;
@@ -33,7 +39,7 @@ public class ButtonClick : MonoBehaviour
             controller.UpdateStats();
         } else if (transform.name == "Button2" && controller.gameState == GameState.PLAYER2)
         {   
-            Debug.Log(2);
+            // Debug.Log(2);
             controller.gameState = GameState.PLAYER1;
             controller.button1.GetComponent<ButtonHover>().isHoverable = true;
             controller.button2.GetComponent<ButtonHover>().isHoverable = false;

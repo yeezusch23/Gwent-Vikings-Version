@@ -47,7 +47,7 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Aumenta en 2 el poder de las cartas de la fila donde es colocada");
         effectList.setEffect("Aumenta en 1 el poder de las cartas de la fila donde es colocada");
         effectList.setEffect("Reduce en 1 la fuerza de todas las unidades cuerpo a cuerpo en el campo de batalla");
-        effectList.setEffect("Reduce en 1 la potencia de los ataques a distancia de las unidades enemigas");
+        effectList.setEffect("Reduce en 1 la potencia de los ataques a distancia de todas las unidades en el campo de batalla");
         effectList.setEffect("Despeja el clima eliminando todas las cartas de tipo clima");
         effectList.setEffect("Aumenta en 2 el poder de una carta");
         effectList.setEffect("Robar una carta");
