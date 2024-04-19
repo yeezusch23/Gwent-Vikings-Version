@@ -88,26 +88,168 @@ public class StartGame : MonoBehaviour
         // if(n == 5)
         if(n == 6)
             GetCardOfDeck(row);
+        if(n == 7)
+            DeletCard(row, 1);
+        if(n == 9)
+            DeletCard(row, 2);
+    }
+
+    void DeletCard(Transform row, int op)
+    {   
+        Transform cardMin = row.transform.GetChild(row.transform.childCount-1);
+        Transform cardMax = row.transform.GetChild(row.transform.childCount-1);
+        int min = int.MaxValue;
+        int max = int.MinValue;
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {   
+            //close
+            int childs = player2.transform.Find("close").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "close") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player2.transform.Find("close").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player2.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player2.transform.Find("close").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player2.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player2.transform.Find("close").transform.Find("row").GetChild(i); 
+                }
+            }
+            //range
+            childs = player2.transform.Find("range").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "range") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player2.transform.Find("range").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player2.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player2.transform.Find("range").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player2.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player2.transform.Find("range").transform.Find("row").GetChild(i); 
+                }
+            }
+            //siege
+            childs = player2.transform.Find("siege").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "siege") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player2.transform.Find("siege").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player2.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player2.transform.Find("siege").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player2.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player2.transform.Find("siege").transform.Find("row").GetChild(i); 
+                }
+            }
+            if(op == 1 && min != int.MaxValue)
+            {   
+                if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
+                cardMin.transform.SetParent(discardLastkingDom.transform, false);
+            }
+            if(op == 2 && max != int.MinValue)
+            {   
+                if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
+                cardMax.transform.SetParent(discardLastkingDom.transform, false);
+            }
+        }else{
+            //close
+            int childs = player1.transform.Find("close").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "close") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player1.transform.Find("close").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player1.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player1.transform.Find("close").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player1.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player1.transform.Find("close").transform.Find("row").GetChild(i); 
+                }
+            }
+            //range
+            childs = player1.transform.Find("range").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "range") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player1.transform.Find("range").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player1.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player1.transform.Find("range").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player1.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player1.transform.Find("range").transform.Find("row").GetChild(i); 
+                }
+            }
+            //siege
+            childs = player1.transform.Find("siege").transform.Find("row").childCount;
+            // if(row.transform.parent.name == "siege") childs--;
+            for(int i = 0; i < childs; i++)
+            {   
+                Transform child = player1.transform.Find("siege").transform.Find("row").GetChild(i);
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    min = player1.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMin = player1.transform.Find("siege").transform.Find("row").GetChild(i); 
+                }
+                if(max < child.transform.Find("Stats").GetComponent<CardStats>().power)
+                {
+                    max = player1.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+                    cardMax = player1.transform.Find("siege").transform.Find("row").GetChild(i); 
+                }
+            }
+            if(op == 1 && min != int.MaxValue)
+            {   
+                if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
+                cardMin.transform.SetParent(discardVikings.transform, false);
+            }
+            if(op == 2 && max != int.MinValue)
+            {   
+                if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
+                cardMax.transform.SetParent(discardVikings.transform, false);
+            }
+        }
     }
 
     void GetCardOfDeck(Transform row)
     {
         if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
         {
-            int n = int.Parse(handVikingsCount.transform.Find("number").GetComponent<TextMeshProUGUI>().text);
             InstantiateCard(vikingsDeck.cards[0], "Vikings");
             vikingsDeck.RemoveCard(0);    
         } else 
         {
-            int n = int.Parse(handLastKingdomCount.transform.Find("number").GetComponent<TextMeshProUGUI>().text);
-            InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
+            InstantiateCard(lastKingdomDeck.cards[0], "Last Kingdom");
             lastKingdomDeck.RemoveCard(0);
         }
     }
 
     void DeletClimas(Transform row, int add)
     {   
-        Debug.Log("COUNT: " + row.transform.name);
+        // Debug.Log("COUNT: " + row.transform.name);
         int childs = climaField.transform.childCount;
         for(int i = 0; i < childs; i++)
         {    
@@ -119,6 +261,7 @@ public class StartGame : MonoBehaviour
                 ReducePowerRow("range", 1);
             
             if(climaField.transform.GetChild(0).rotation.z == 0){
+                // Debug.Log("Entra");
                 if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
                 climaField.transform.GetChild(0).transform.SetParent(discardVikings.transform, false);
             }
