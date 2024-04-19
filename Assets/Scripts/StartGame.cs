@@ -94,8 +94,109 @@ public class StartGame : MonoBehaviour
             DeletCard(row, 2);
         if(n == 10)
             AddPowerCardLeft(row);
+        if(n == 11)
+            AverageCards(row);
     }
 
+    void AverageCards(Transform row)
+    {   
+        int sum = 0, cnt = 0, val = 0;
+        if(gameState == GameState.PLAYER2 || gameState == GameState.PLAYER1PASS)
+        {
+            //close
+            cnt += player2.transform.Find("close").transform.Find("row").childCount;
+            for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
+            {   
+                sum += player2.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //range
+            cnt += player2.transform.Find("range").transform.Find("row").childCount;
+            for(int i = 0; i < player2.transform.Find("range").transform.Find("row").childCount; i++)
+            {   
+                sum += player2.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //siege
+            cnt += player2.transform.Find("siege").transform.Find("row").childCount;
+            for(int i = 0; i < player2.transform.Find("siege").transform.Find("row").childCount; i++)
+            {   
+                sum += player2.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //****************************************************************************************
+            if(cnt != 0)
+                val = sum/cnt;
+            //close
+            for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player2.transform.Find("close").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+            //range
+            for(int i = 0; i < player2.transform.Find("range").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player2.transform.Find("range").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+            //siege
+            for(int i = 0; i < player2.transform.Find("siege").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player2.transform.Find("siege").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+        } else
+        {
+            //close
+            cnt += player1.transform.Find("close").transform.Find("row").childCount;
+            for(int i = 0; i < player1.transform.Find("close").transform.Find("row").childCount; i++)
+            {   
+                sum += player1.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //range
+            cnt += player1.transform.Find("range").transform.Find("row").childCount;
+            for(int i = 0; i < player1.transform.Find("range").transform.Find("row").childCount; i++)
+            {   
+                sum += player1.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //siege
+            cnt += player1.transform.Find("siege").transform.Find("row").childCount;
+            for(int i = 0; i < player1.transform.Find("siege").transform.Find("row").childCount; i++)
+            {   
+                sum += player1.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+            }
+            //****************************************************************************************
+            if(cnt != 0)
+                val = sum/cnt;
+            //close
+            for(int i = 0; i < player1.transform.Find("close").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player1.transform.Find("close").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+            //range
+            for(int i = 0; i < player1.transform.Find("range").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player1.transform.Find("range").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+            //siege
+            for(int i = 0; i < player1.transform.Find("siege").transform.Find("row").childCount; i++)
+            {   
+                Transform child = player1.transform.Find("siege").transform.Find("row").GetChild(i);    
+                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+            }
+        }
+    }
     void AddPowerCardLeft(Transform row)
     {
         if(row.transform.childCount >= 2)

@@ -55,7 +55,7 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Reduce en 2 el poder de una carta");
         effectList.setEffect("Eliminar la carta con mas poder del campo rival");
         effectList.setEffect("Aumenta en 1 el poder las cartas adyacentes");
-        effectList.setEffect("Caclula el promedio de poder entre todas las cartas del campo del rival. Luego iguala el poder de todas las cartas del campo del rival a ese promedio.");
+        effectList.setEffect("Caclula el promedio de poder entre todas las cartas del campo del propio ([parte entera]). Luego iguala el poder de todas las cartas a ese promedio");
         effectList.setEffect("Limpia la fila del campo (no vacia) del rival con menos unidades");
         effectList.setEffect("Multiplica por n su ataque, siendo n la cantidad de cartas iguales a ella en el campo");
         effectList.setEffect("Permite colocar una carta con poder 0 en el lugar de una carta del campo para regresar esta a la mano");
