@@ -92,14 +92,41 @@ public class StartGame : MonoBehaviour
             DeletCard(row, 1);
         if(n == 9)
             DeletCard(row, 2);
-        // if(n == 10)
-            // AddPowerCardLeft(row);
+        if(n == 10)
+            AddPowerCardLeft(row);
     }
 
-    // void AddPowerCardLeft()
-    // {
+    void AddPowerCardLeft(Transform row)
+    {
+        if(row.transform.childCount >= 2)
+        {
+            Transform child = row.transform.GetChild(row.transform.childCount-2);
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type != "Oro"){ 
+                child.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+            }
+        }
+    }
 
-    // }
+    public void DynamicEffects(Transform row)
+    {
+        CheckAddPowerRight(row);
+    }
+    void CheckAddPowerRight(Transform row)
+    {
+        if(row.transform.childCount >= 2)
+        {
+            Transform childLeft = row.transform.GetChild(row.transform.childCount-2);
+            Transform childRight = row.transform.GetChild(row.transform.childCount-1);
+            if(childLeft.Find("Stats").GetComponent<CardStats>().effect == 10)
+            {   
+                if(childRight.transform.Find("Stats").GetComponent<CardStats>().type != "Oro"){
+                    childRight.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+                    childRight.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = childRight.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                }
+            }
+        }
+    }
 
     void DeletCard(Transform row, int op)
     {   
