@@ -130,6 +130,7 @@ public class StartGame : MonoBehaviour
         
         //LastKingdom
         //close
+        power = 0; 
         sum = 0;
         for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
         {   
@@ -159,7 +160,7 @@ public class StartGame : MonoBehaviour
         //power
         player2.transform.Find("Stats").transform.Find("powerCount").transform.Find("number").GetComponent<TextMeshProUGUI>().text = power.ToString();
         //Deck
-        player2.transform.Find("Deck").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = vikingsDeck.cards.Count.ToString();
+        player2.transform.Find("Deck").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = lastKingdomDeck.cards.Count.ToString();
         
     }
     void InitGame()
