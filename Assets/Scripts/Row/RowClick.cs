@@ -20,7 +20,7 @@ public class RowClick : MonoBehaviour
     }
 
     public void OnRowClick()
-    {
+    {   
         // Debug.Log("Player : " + transform.parent.parent.name + "-> Row: " + transform.parent.name);
         if (controller.selectedCard != null)
         {   
@@ -50,13 +50,13 @@ public class RowClick : MonoBehaviour
                 controller.ResetField(2);
                 controller.ActiveEffect(transform);
                 controller.DynamicEffects(transform);
+                controller.UpdateClimaEffects(transform);
+                if(controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2)
+                    controller.playerMove = true;
                 controller.UpdateStats();
-                
-                //********************************
-                // controller.ActiveEffect(transform);
             } 
-            
         }
+
     }
 
    

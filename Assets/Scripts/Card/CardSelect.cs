@@ -25,7 +25,7 @@ public class CardSelect : MonoBehaviour
 
     public void OnCardSelect()
     {   
-        if(isSelectable)
+        if(isSelectable && !controller.playerMove)
         {
             if(controller.selectedCard == null)
             {

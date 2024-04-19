@@ -49,14 +49,14 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Reduce en 1 la fuerza de todas las unidades cuerpo a cuerpo en el campo de batalla");
         effectList.setEffect("Reduce en 1 la potencia de los ataques a distancia de todas las unidades en el campo de batalla");
         effectList.setEffect("Despeja el clima eliminando todas las cartas de tipo clima");
-        effectList.setEffect("Aumenta en 2 el poder de una carta");
+        effectList.setEffect("Robar una carta");
         effectList.setEffect("Robar una carta");
         effectList.setEffect("Eliminar la carta con menos poder del rival");
-        effectList.setEffect("Reduce en 2 el poder de una carta");
+        effectList.setEffect("Eliminar la carta con menos poder del rival");
         effectList.setEffect("Eliminar la carta con mas poder del campo rival");
         effectList.setEffect("Aumenta en 1 el poder las cartas adyacentes");
         effectList.setEffect("Caclula el promedio de poder entre todas las cartas del campo del propio ([parte entera]). Luego iguala el poder de todas las cartas a ese promedio");
-        effectList.setEffect("Limpia la fila del campo (no vacia) del rival con menos unidades");
+        effectList.setEffect("Limpia la fila del campo (no vacia) del rival con menos unidades plata");
         effectList.setEffect("Multiplica por n su ataque, siendo n la cantidad de cartas iguales a ella en el campo");
         effectList.setEffect("Permite colocar una carta con poder 0 en el lugar de una carta del campo para regresar esta a la mano");
     }
@@ -72,12 +72,12 @@ public class CardHover : MonoBehaviour
                 TranslateUp();
             }
         } 
-        
     }
 
     public void OnHoverExit()
     {   
-        DisableShowCard();
+        if(isHoverable)
+            ShowInfo();
         if(gameObject != controller.selectedCard)
         {
             if (cardActive && cardTop)
@@ -101,12 +101,13 @@ public class CardHover : MonoBehaviour
         cardTop = false;
     }
 
-    public void ShowInfo()
+    void ShowInfo()
     {   
         
         // Debug.Log(Node);
         // Node.SetActive(true);   
-        Node.GetComponent<Image> ().enabled = true;
+        Node.GetComponent<Image>().enabled = true;
+        NodeText.GetComponent<TextMeshProUGUI> ().enabled = true;
         // Debug.Log(Node.transform.Find("Image"));
         CardStats card = transform.Find("Stats").GetComponent<CardStats>();
         //Image
@@ -164,9 +165,5 @@ public class CardHover : MonoBehaviour
         Node.transform.Find("Effect").GetComponent<TextMeshProUGUI>().text = effectList.effects[card.effect];
     }
 
-    
-    public void DisableShowCard()
-    {
-        // Node.SetActive(false);
-    }
+
 }

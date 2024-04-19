@@ -32,6 +32,8 @@ public class ClimaClick : MonoBehaviour
             controller.ResetField(1);
             controller.ResetField(2);
             controller.ActiveEffect(transform);
+            if(controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2)
+                    controller.playerMove = true;
             controller.UpdateStats();
         }   
     }
