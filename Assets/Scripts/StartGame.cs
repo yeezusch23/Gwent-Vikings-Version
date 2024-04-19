@@ -63,8 +63,6 @@ public class StartGame : MonoBehaviour
 
     public bool playerMove = false;
 
-    Player PLAYER1;
-    Player PLAYER2;
     void Start () 
     {   
         InitGame();
@@ -97,8 +95,18 @@ public class StartGame : MonoBehaviour
             gemsVikings.transform.GetChild(gemsVikingsCount).GetComponent<Image>().sprite = greyGem;
             gameState = GameState.PLAYER1;
         } 
+        
         ClearRows();
         UpdateStats();
+        InstantiateCard(vikingsDeck.cards[0], "Vikings");
+        vikingsDeck.RemoveCard(0);
+        InstantiateCard(vikingsDeck.cards[0], "Vikings");
+        vikingsDeck.RemoveCard(0);
+        
+        InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
+        lastKingdomDeck.RemoveCard(0);
+        InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
+        lastKingdomDeck.RemoveCard(0);
     }
 
     void ClearRows()
@@ -168,19 +176,15 @@ public class StartGame : MonoBehaviour
     {   
         Transform card = row.transform.GetChild(row.transform.childCount - 1);
         string cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
+        string cardRow = card.transform.Find("Stats").GetComponent<CardStats>().row;
         if(cardType != "Oro")
-        {
-            for(int i = 0; i < climaField.transform.childCount; i++)
+        {   
+            // Debug.Log(1);
+            if(cardRow == "close" || cardRow == "range" || cardRow == "close_range")
             {   
-                Transform child = climaField.transform.GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().effect == 2)
-                {
-                    if(cardType == "close" || cardType == "range")
-                    {
-                        child.transform.Find("Stats").GetComponent<CardStats>().power -= 1;
-                        child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
-                    }
-                }
+                // Debug.Log(1);
+                card.transform.Find("Stats").GetComponent<CardStats>().power -= climaField.transform.childCount;
+                card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
             }
         }
     }
@@ -298,7 +302,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("close").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -311,7 +315,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("range").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("range").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -324,7 +328,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("siege").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("siege").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("siege").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("siege").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -335,15 +339,11 @@ public class StartGame : MonoBehaviour
             if(min != int.MaxValue)
             {   
                 int n = minRow.childCount;
-                int p = 0;
                 for(int i = 0; i < n; i++)
                 {   
-                    Transform child = minRow.GetChild(p);    
-                    if(child.Find("Stats").GetComponent<CardStats>().type == "Oro"){ 
-                        p++;
-                        continue;
-                    }
-                    if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
+                    Transform child = minRow.GetChild(0);    
+                    // if(child.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                    if(discardLastkingDom.transform.childCount != 0) discardLastkingDom.transform.GetChild(0).parent = null;
                     child.transform.SetParent(discardLastkingDom.transform, false);    
                 }
             }
@@ -354,7 +354,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("close").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("close").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -367,7 +367,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("range").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("range").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -380,7 +380,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("siege").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("siege").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 cnt++;
             }
             if(min > cnt && cnt != 0)
@@ -391,15 +391,11 @@ public class StartGame : MonoBehaviour
             if(min != int.MaxValue)
             {   
                 int n = minRow.childCount;
-                int p = 0;
                 for(int i = 0; i < n; i++)
                 {   
-                    Transform child = minRow.GetChild(p);    
-                    if(child.Find("Stats").GetComponent<CardStats>().type == "Oro"){ 
-                        p++;
-                        continue;
-                    }
-                    if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
+                    Transform child = minRow.GetChild(0);    
+                    // if(child.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                    if(discardVikings.transform.childCount != 0) discardVikings.transform.GetChild(0).parent = null;
                     child.transform.SetParent(discardVikings.transform, false);    
                 }
             }
@@ -409,7 +405,7 @@ public class StartGame : MonoBehaviour
     void AverageCards(Transform row)
     {   
         int sum = 0, cnt = 0, val = 0;
-        if(gameState == GameState.PLAYER2 || gameState == GameState.PLAYER1PASS)
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
         {
             //close
             cnt += player2.transform.Find("close").transform.Find("row").childCount;
@@ -436,7 +432,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("close").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -444,7 +440,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("range").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("range").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -452,7 +448,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player2.transform.Find("siege").transform.Find("row").childCount; i++)
             {   
                 Transform child = player2.transform.Find("siege").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -483,7 +479,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("close").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("close").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -491,7 +487,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("range").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("range").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -499,7 +495,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < player1.transform.Find("siege").transform.Find("row").childCount; i++)
             {   
                 Transform child = player1.transform.Find("siege").transform.Find("row").GetChild(i);    
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 child.transform.Find("Stats").GetComponent<CardStats>().power = val;
                 child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
             }
@@ -510,10 +506,8 @@ public class StartGame : MonoBehaviour
         if(row.transform.childCount >= 2)
         {
             Transform child = row.transform.GetChild(row.transform.childCount-2);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type != "Oro"){ 
-                child.transform.Find("Stats").GetComponent<CardStats>().power += 1;
-                child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
-            }
+            child.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+            child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
     }
 
@@ -529,10 +523,8 @@ public class StartGame : MonoBehaviour
             Transform childRight = row.transform.GetChild(row.transform.childCount-1);
             if(childLeft.Find("Stats").GetComponent<CardStats>().effect == 10)
             {   
-                if(childRight.transform.Find("Stats").GetComponent<CardStats>().type != "Oro"){
-                    childRight.transform.Find("Stats").GetComponent<CardStats>().power += 1;
-                    childRight.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = childRight.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
-                }
+                childRight.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+                childRight.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = childRight.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
             }
         }
     }
@@ -551,7 +543,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player2.transform.Find("close").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player2.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -569,7 +561,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player2.transform.Find("range").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player2.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -587,7 +579,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player2.transform.Find("siege").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player2.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -616,7 +608,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player1.transform.Find("close").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player1.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -634,7 +626,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player1.transform.Find("range").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player1.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -652,7 +644,7 @@ public class StartGame : MonoBehaviour
             for(int i = 0; i < childs; i++)
             {   
                 Transform child = player1.transform.Find("siege").transform.Find("row").GetChild(i);
-                if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+                // if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
                 if(min > child.transform.Find("Stats").GetComponent<CardStats>().power)
                 {
                     min = player1.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
@@ -871,8 +863,6 @@ public class StartGame : MonoBehaviour
     }
     void InitGame()
     {   
-        PLAYER1 = new Player();
-        PLAYER2 = new Player();
         InitVikingsDeck();
         InitLastKingdomDeck();
         for(int i = 0; i < 10; i++)
