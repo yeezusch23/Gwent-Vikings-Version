@@ -92,7 +92,17 @@ public class StartGame : MonoBehaviour
 
     void GetCardOfDeck(Transform row)
     {
-        
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {
+            int n = int.Parse(handVikingsCount.transform.Find("number").GetComponent<TextMeshProUGUI>().text);
+            InstantiateCard(vikingsDeck.cards[0], "Vikings");
+            vikingsDeck.RemoveCard(0);    
+        } else 
+        {
+            int n = int.Parse(handLastKingdomCount.transform.Find("number").GetComponent<TextMeshProUGUI>().text);
+            InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
+            lastKingdomDeck.RemoveCard(0);
+        }
     }
 
     void DeletClimas(Transform row, int add)
@@ -118,12 +128,12 @@ public class StartGame : MonoBehaviour
                 climaField.transform.GetChild(0).transform.SetParent(discardLastkingDom.transform, false);
             }
         }
-        if(row.transform.GetChild(row.transform.childCount-1).transform.Find("Stats").GetComponent<CardStats>().faction == "Vikings")
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
         {
-            if(row.transform.childCount != 0) Destroy(row.transform.GetChild(0).gameObject);
+            if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
             row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardVikings.transform, false);
         }else{
-            if(row.transform.childCount != 0) Destroy(row.transform.GetChild(0).gameObject);
+            if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
             row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardLastkingDom.transform, false);
         }
     }

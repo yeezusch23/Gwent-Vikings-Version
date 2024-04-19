@@ -105,7 +105,7 @@ public class CardHover : MonoBehaviour
     {   
         
         // Debug.Log(Node);
-        Node.SetActive(true);
+        // Node.SetActive(true);   
         Node.GetComponent<Image> ().enabled = true;
         // Debug.Log(Node.transform.Find("Image"));
         CardStats card = transform.Find("Stats").GetComponent<CardStats>();
@@ -167,6 +167,6 @@ public class CardHover : MonoBehaviour
     
     public void DisableShowCard()
     {
-        Node.SetActive(false);
+        // Node.SetActive(false);
     }
 }

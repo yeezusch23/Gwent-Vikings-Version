@@ -42,7 +42,7 @@ public class Deck
         cards.OrderBy(x => Guid.NewGuid());
     }
 
-    public Card GetCard(int x)
+    public Card GetCard(int x = 0)
     {
         // Método para obtener una carta del mazo por su índice
         return cards[x];
