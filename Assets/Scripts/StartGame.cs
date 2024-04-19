@@ -59,12 +59,15 @@ public class StartGame : MonoBehaviour
     }
 
     public void ActiveEffect(Transform card)
-    {
-        Function_1(card);
+    {   
+        // Debug.Log(card.transform.GetChild(card.transform.childCount-1).name);
+        int n = card.transform.GetChild(card.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
+        if(n == 0)
+            Function_0(card);
         // Debug.Log("Active");
     }
 
-    void Function_1(Transform card)
+    void Function_0(Transform card)
     {   
         int sum = 0;
         int childs = card.parent.transform.Find("row").childCount;
@@ -75,20 +78,90 @@ public class StartGame : MonoBehaviour
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
             sum += child.transform.Find("Stats").GetComponent<CardStats>().power;
         }
-        if(gameState == GameState.PLAYER1){
-            if(card.parent.name == "close")
-                closePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-            if(card.parent.name == "range")
-                rangePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        }else{
-            if(card.parent.name == "close")
-                closePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-            if(card.parent.name == "range")
-                rangePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
-        }
+        // if(gameState == GameState.PLAYER1){
+        //     if(card.parent.name == "close")
+        //         closePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //     if(card.parent.name == "range")
+        //         rangePowerVikings.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        // }else{
+        //     if(card.parent.name == "close")
+        //         closePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //     if(card.parent.name == "range")
+        //         rangePowerLastKingdom.GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        // }
+        UpdateStats();
     }
 
-
+    public void UpdateStats()
+    {   
+        int sum, power = 0;
+        //Vikings
+        //close
+        sum = 0;
+        for(int i = 0; i < player1.transform.Find("close").transform.Find("row").childCount; i++)
+        {   
+            sum += player1.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player1.transform.Find("close").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //range
+        sum = 0;
+        for(int i = 0; i < player1.transform.Find("range").transform.Find("row").childCount; i++)
+        {   
+            sum += player1.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player1.transform.Find("range").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //siege
+        sum = 0;
+        for(int i = 0; i < player1.transform.Find("siege").transform.Find("row").childCount; i++)
+        {   
+            sum += player1.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player1.transform.Find("siege").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //hand
+        int cnt = player1.transform.Find("hand").transform.childCount;
+        player1.transform.Find("Stats").transform.Find("handCount").transform.Find("number").GetComponent<TextMeshProUGUI>().text = cnt.ToString();
+        //power
+        player1.transform.Find("Stats").transform.Find("powerCount").transform.Find("number").GetComponent<TextMeshProUGUI>().text = power.ToString();
+        //Deck
+        player1.transform.Find("Deck").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = vikingsDeck.cards.Count.ToString();
+        
+        //LastKingdom
+        //close
+        sum = 0;
+        for(int i = 0; i < player2.transform.Find("close").transform.Find("row").childCount; i++)
+        {   
+            sum += player2.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player2.transform.Find("close").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //range
+        sum = 0;
+        for(int i = 0; i < player2.transform.Find("range").transform.Find("row").childCount; i++)
+        {   
+            sum += player2.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player2.transform.Find("range").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //siege
+        sum = 0;
+        for(int i = 0; i < player2.transform.Find("siege").transform.Find("row").childCount; i++)
+        {   
+            sum += player2.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power;
+        }
+        power += sum;
+        player2.transform.Find("siege").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = sum.ToString();
+        //hand
+        int cnt2 = player2.transform.Find("hand").transform.childCount;
+        player2.transform.Find("Stats").transform.Find("handCount").transform.Find("number").GetComponent<TextMeshProUGUI>().text = cnt2.ToString();
+        //power
+        player2.transform.Find("Stats").transform.Find("powerCount").transform.Find("number").GetComponent<TextMeshProUGUI>().text = power.ToString();
+        //Deck
+        player2.transform.Find("Deck").transform.Find("count").transform.Find("number").GetComponent<TextMeshProUGUI>().text = vikingsDeck.cards.Count.ToString();
+        
+    }
     void InitGame()
     {   
         PLAYER1 = new Player();

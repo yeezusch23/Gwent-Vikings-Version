@@ -31,6 +31,7 @@ public class ClimaClick : MonoBehaviour
             
             controller.ResetField(1);
             controller.ResetField(2);
+            controller.UpdateStats();
         }   
     }
 }

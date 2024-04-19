@@ -33,6 +33,7 @@ public class SpecialClick : MonoBehaviour
             controller.ResetField(1);
             controller.ResetField(2);
             controller.ActiveEffect(transform);
+            controller.UpdateStats();
         }   
     }
 }
