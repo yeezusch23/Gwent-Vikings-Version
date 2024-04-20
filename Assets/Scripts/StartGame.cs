@@ -78,6 +78,7 @@ public class StartGame : MonoBehaviour
             gemsLastKingdomCount -= 1;
             gemsLastKingdom.transform.GetChild(gemsLastKingdomCount).GetComponent<Image>().sprite = greyGem;
             gameState = GameState.PLAYER1;
+
         }
         if(pwVikings < pwLastKingdom)
         {
@@ -106,12 +107,15 @@ public class StartGame : MonoBehaviour
         if(gemsVikingsCount == 0 && gemsLastKingdomCount == 0)
         {
             menuReset.SetActive(true);
+            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "EMPATE";
         }else if(gemsVikingsCount == 0)
         {
             menuReset.SetActive(true);
+            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "JUGADOR 2 GANA";
         } else if(gemsLastKingdomCount == 0)
         {
             menuReset.SetActive(true);
+            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "JUGADOR 1 GANA";
         }
 
     }
