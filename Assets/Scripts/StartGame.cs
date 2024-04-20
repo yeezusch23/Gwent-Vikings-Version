@@ -283,18 +283,18 @@ public class StartGame : MonoBehaviour
                     card.transform.Find("Stats").GetComponent<CardStats>().power -= climaField.transform.childCount;
                     card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
                 }
-            }
-            if(row.parent.Find("special").transform.childCount > 0)
-            {
-                int effect = row.parent.Find("special").transform.GetChild(0).transform.Find("Stats").GetComponent<CardStats>().effect;
-                if(effect == 0)
+                if(row.parent.Find("special").transform.childCount > 0)
                 {
-                    card.transform.Find("Stats").GetComponent<CardStats>().power += 2;
-                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();          
-                } else
-                {
-                    card.transform.Find("Stats").GetComponent<CardStats>().power += 1;
-                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                    int effect = row.parent.Find("special").transform.GetChild(0).transform.Find("Stats").GetComponent<CardStats>().effect;
+                    if(effect == 0)
+                    {
+                        card.transform.Find("Stats").GetComponent<CardStats>().power += 2;
+                        card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();          
+                    } else
+                    {
+                        card.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+                        card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                    }
                 }
             }
         }
@@ -364,6 +364,7 @@ public class StartGame : MonoBehaviour
                     cnt++;
                 }
             }
+            Debug.Log("Contador" + cnt);
             card.transform.Find("Stats").GetComponent<CardStats>().power *= cnt;
             card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         } else
