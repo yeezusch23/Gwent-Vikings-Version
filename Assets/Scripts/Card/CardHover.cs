@@ -18,8 +18,8 @@ public class CardHover : MonoBehaviour
     public StartGame controller;
     public bool cardActive = true;
     public bool cardTop = false;
-
     public bool isHoverable = true;
+    // public bool isLeader = false;
     public GameObject showCard;
 
     public EffectList effectList;

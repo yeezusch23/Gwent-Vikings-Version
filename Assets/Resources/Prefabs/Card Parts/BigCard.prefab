@@ -101,9 +101,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048198bbf7ba20c47ad493da5612d838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Node: {fileID: 0}
+  NodeText: {fileID: 0}
+  controllerObject: {fileID: 0}
+  controller: {fileID: 0}
   cardActive: 1
   cardTop: 0
-  showCard: {fileID: 1105235149598579606}
+  isHoverable: 1
+  isLeader: 0
+  showCard: {fileID: 0}
+  effectList:
+    effects: []
 --- !u!1001 &2152986336707324272
 PrefabInstance:
   m_ObjectHideFlags: 0

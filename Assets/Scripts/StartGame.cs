@@ -97,16 +97,43 @@ public class StartGame : MonoBehaviour
         } 
         
         ClearRows();
+        AddCardDeck("Vikings");
+        AddCardDeck("Vikings");
+        AddCardDeck("Last Kingdom");
+        AddCardDeck("Last Kingdom");
         UpdateStats();
-        InstantiateCard(vikingsDeck.cards[0], "Vikings");
-        vikingsDeck.RemoveCard(0);
-        InstantiateCard(vikingsDeck.cards[0], "Vikings");
-        vikingsDeck.RemoveCard(0);
-        
-        InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
-        lastKingdomDeck.RemoveCard(0);
-        InstantiateCard(lastKingdomDeck.cards[0], "Vikings");
-        lastKingdomDeck.RemoveCard(0);
+    }
+
+    public void AddCardDeck(string cardDeckName)
+    {
+        if(cardDeckName == "Vikings")
+        {   
+            InstantiateCard(vikingsDeck.cards[0], "Vikings");
+            vikingsDeck.RemoveCard(0);
+            if(handVikings.transform.childCount > 10)
+            {   
+                Transform card = handVikings.transform.GetChild(handVikings.transform.childCount-1); 
+                card.transform.GetComponent<CardHover>().cardActive = false;
+                card.transform.GetComponent<CardSelect>().isSelectable = false;
+                if(discardVikings.transform.childCount > 0)
+                    discardVikings.transform.GetChild(0).parent = null;
+                card.transform.SetParent(discardVikings.transform, false); 
+            }
+        } else
+        {
+            InstantiateCard(lastKingdomDeck.cards[0], "Last Kingdom");
+            lastKingdomDeck.RemoveCard(0);  
+            if(handLastKingdom.transform.childCount > 10)
+            {   
+                Transform card = handLastKingdom.transform.GetChild(handLastKingdom.transform.childCount-1); 
+                card.transform.GetComponent<CardHover>().cardActive = false;
+                card.transform.GetComponent<CardSelect>().isSelectable = false;
+                if(discardLastkingDom.transform.childCount > 0)
+                    discardLastkingDom.transform.GetChild(0).parent = null;
+                card.transform.SetParent(discardLastkingDom.transform, false); 
+            }
+        }
+
     }
 
     void ClearRows()
@@ -123,6 +150,13 @@ public class StartGame : MonoBehaviour
                 discardVikings.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardVikings.transform, false);   
         }
+        if(player1.transform.Find("close").transform.Find("special").childCount > 0)
+        {   
+            if(discardVikings.transform.childCount > 0) 
+                discardVikings.transform.GetChild(0).transform.parent = null;
+            player1.transform.Find("close").transform.Find("special").transform.GetChild(0).transform.SetParent(discardVikings.transform, false);
+        }
+
         //range
         n = player1.transform.Find("range").transform.Find("row").childCount;
         for(int i = 0; i < n; i++)
@@ -132,6 +166,13 @@ public class StartGame : MonoBehaviour
                 discardVikings.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardVikings.transform, false);   
         }
+        if(player1.transform.Find("range").transform.Find("special").childCount > 0)
+        {   
+            if(discardVikings.transform.childCount > 0) 
+                discardVikings.transform.GetChild(0).transform.parent = null;
+            player1.transform.Find("range").transform.Find("special").transform.GetChild(0).transform.SetParent(discardVikings.transform, false);
+        }
+
         //siege
         n = player1.transform.Find("siege").transform.Find("row").childCount;
         for(int i = 0; i < n; i++)
@@ -140,6 +181,12 @@ public class StartGame : MonoBehaviour
             if(discardVikings.transform.childCount > 0) 
                 discardVikings.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardVikings.transform, false);      
+        }
+        if(player1.transform.Find("siege").transform.Find("special").childCount > 0)
+        {   
+            if(discardVikings.transform.childCount > 0) 
+                discardVikings.transform.GetChild(0).transform.parent = null;
+            player1.transform.Find("siege").transform.Find("special").transform.GetChild(0).transform.SetParent(discardVikings.transform, false);
         }
         //Player2
         //close
@@ -151,6 +198,12 @@ public class StartGame : MonoBehaviour
                 discardLastkingDom.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardLastkingDom.transform, false);         
         }
+        if(player2.transform.Find("close").transform.Find("special").childCount > 0)
+        {   
+            if(discardLastkingDom.transform.childCount > 0) 
+                discardLastkingDom.transform.GetChild(0).transform.parent = null;
+            player2.transform.Find("close").transform.Find("special").transform.GetChild(0).transform.SetParent(discardLastkingDom.transform, false);
+        }
         //range
         n = player2.transform.Find("range").transform.Find("row").childCount;
         for(int i = 0; i < n; i++)
@@ -159,6 +212,12 @@ public class StartGame : MonoBehaviour
             if(discardLastkingDom.transform.childCount > 0) 
                 discardLastkingDom.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardLastkingDom.transform, false);      
+        }
+        if(player2.transform.Find("range").transform.Find("special").childCount > 0)
+        {   
+            if(discardLastkingDom.transform.childCount > 0) 
+                discardLastkingDom.transform.GetChild(0).transform.parent = null;
+            player2.transform.Find("range").transform.Find("special").transform.GetChild(0).transform.SetParent(discardLastkingDom.transform, false);
         }
         //siege
         n = player2.transform.Find("siege").transform.Find("row").childCount;
@@ -169,22 +228,59 @@ public class StartGame : MonoBehaviour
                 discardLastkingDom.transform.GetChild(0).transform.parent = null;
             child.transform.SetParent(discardLastkingDom.transform, false);      
         }
-
+        if(player2.transform.Find("siege").transform.Find("special").childCount > 0)
+        {   
+            if(discardLastkingDom.transform.childCount > 0) 
+                discardLastkingDom.transform.GetChild(0).transform.parent = null;
+            player2.transform.Find("siege").transform.Find("special").transform.GetChild(0).transform.SetParent(discardLastkingDom.transform, false);
+        }
+        //Climas
+        n = climaField.transform.childCount;
+        for(int i = 0; i < n; i++)
+        {   
+            Transform child = climaField.transform.GetChild(0);
+            if(child.transform.rotation.z == 0)
+            {
+                if(discardVikings.transform.childCount > 0) 
+                    discardVikings.transform.GetChild(0).transform.parent = null;
+                child.transform.SetParent(discardVikings.transform, false);      
+            } else
+            {
+                if(discardLastkingDom.transform.childCount > 0) 
+                    discardLastkingDom.transform.GetChild(0).transform.parent = null;
+                child.transform.SetParent(discardLastkingDom.transform, false);
+            }
+        }
     }
 
     public void UpdateClimaEffects(Transform row)
     {   
-        Transform card = row.transform.GetChild(row.transform.childCount - 1);
-        string cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
-        string cardRow = card.transform.Find("Stats").GetComponent<CardStats>().row;
-        if(cardType != "Oro")
-        {   
-            // Debug.Log(1);
-            if(cardRow == "close" || cardRow == "range" || cardRow == "close_range")
+        if(row.transform.childCount > 0) {
+            Transform card = row.transform.GetChild(row.transform.childCount - 1);
+            string cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
+            string cardRow = card.transform.Find("Stats").GetComponent<CardStats>().row;
+            if(cardType != "Oro")
             {   
                 // Debug.Log(1);
-                card.transform.Find("Stats").GetComponent<CardStats>().power -= climaField.transform.childCount;
-                card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                if(cardRow == "close" || cardRow == "range" || cardRow == "close_range")
+                {   
+                    // Debug.Log(1);
+                    card.transform.Find("Stats").GetComponent<CardStats>().power -= climaField.transform.childCount;
+                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                }
+            }
+            if(row.parent.Find("special").transform.childCount > 0)
+            {
+                int effect = row.parent.Find("special").transform.GetChild(0).transform.Find("Stats").GetComponent<CardStats>().effect;
+                if(effect == 0)
+                {
+                    card.transform.Find("Stats").GetComponent<CardStats>().power += 2;
+                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();          
+                } else
+                {
+                    card.transform.Find("Stats").GetComponent<CardStats>().power += 1;
+                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                }
             }
         }
     }
@@ -746,14 +842,6 @@ public class StartGame : MonoBehaviour
             if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += cnt;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
-        }
-        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
-        {
-            if(discardVikings.transform.childCount != 0) Destroy(discardVikings.transform.GetChild(0).gameObject);
-            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardVikings.transform, false);
-        }else{
-            if(discardLastkingDom.transform.childCount != 0) Destroy(discardLastkingDom.transform.GetChild(0).gameObject);
-            row.transform.GetChild(row.transform.childCount-1).transform.SetParent(discardLastkingDom.transform, false);
         }
         UpdateStats();
     }
