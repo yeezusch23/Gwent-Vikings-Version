@@ -40,8 +40,8 @@ public class ButtonClick : MonoBehaviour
             }
             controller.playerMove = false;
             
-            controller.button1.GetComponent<ButtonHover>().isHoverable = false;
-            controller.button2.GetComponent<ButtonHover>().isHoverable = true;
+            // controller.button1.GetComponent<ButtonHover>().isHoverable = false;
+            // controller.button2.GetComponent<ButtonHover>().isHoverable = true;
             controller.button1.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
             controller.button1.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             if(controller.playerMove == false)
@@ -58,16 +58,21 @@ public class ButtonClick : MonoBehaviour
             }
             controller.playerMove = false;
 
-            controller.button1.GetComponent<ButtonHover>().isHoverable = true;
-            controller.button2.GetComponent<ButtonHover>().isHoverable = false;
+            // controller.button1.GetComponent<ButtonHover>().isHoverable = true;
+            // controller.button2.GetComponent<ButtonHover>().isHoverable = false;
             controller.button2.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
             controller.button2.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.UpdateStats();
         } else if(transform.name == "Button2" && controller.gameState == GameState.PLAYER1PASS)
-        {
+        {   
+            // Debug.Log("1");
+            controller.button2.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
+            controller.button2.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.CloseRound();
         }else if(transform.name == "Button1" && controller.gameState == GameState.PLAYER2PASS)
-        {
+        {   
+            controller.button1.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
+            controller.button1.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.CloseRound();
         }
     }

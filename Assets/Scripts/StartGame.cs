@@ -55,19 +55,23 @@ public class StartGame : MonoBehaviour
     public int gemsLastKingdomCount = 2;
 
     public Sprite greyGem;
+    public Sprite redGem;
+
+    public Sprite leaderImage;
 
     public bool playerMove = false;
 
+    public GameObject menuReset;
     void Start () 
     {   
         InitGame();
-
     }
     
     public void CloseRound()
     {   
         int pwVikings = int.Parse(powerVikings.GetComponent<TextMeshProUGUI>().text);
         int pwLastKingdom = int.Parse(powerLastKingdom.GetComponent<TextMeshProUGUI>().text);
+
         if(pwVikings > pwLastKingdom)
         {
             //Vikings Win    
@@ -89,6 +93,7 @@ public class StartGame : MonoBehaviour
             gemsVikingsCount -= 1;
             gemsVikings.transform.GetChild(gemsVikingsCount).GetComponent<Image>().sprite = greyGem;
             gameState = GameState.PLAYER1;
+
         } 
         
         ClearRows();
@@ -97,6 +102,18 @@ public class StartGame : MonoBehaviour
         AddCardDeck("Last Kingdom");
         AddCardDeck("Last Kingdom");
         UpdateStats();
+
+        if(gemsVikingsCount == 0 && gemsLastKingdomCount == 0)
+        {
+            menuReset.SetActive(true);
+        }else if(gemsVikingsCount == 0)
+        {
+            menuReset.SetActive(true);
+        } else if(gemsLastKingdomCount == 0)
+        {
+            menuReset.SetActive(true);
+        }
+
     }
 
     public void AddCardDeck(string cardDeckName)
@@ -943,6 +960,48 @@ public class StartGame : MonoBehaviour
             }
         }
     }
+
+    public void ResetGame()
+    {   
+        gameState = GameState.PLAYER1;
+        selectedCard = null;
+
+        vikingsDeck.cards.Clear();
+        lastKingdomDeck.cards.Clear();
+
+        gemsVikingsCount = 2;
+        gemsLastKingdomCount = 2;
+
+        gemsVikings.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
+        gemsVikings.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
+        gemsLastKingdom.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
+        gemsLastKingdom.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
+
+        player1.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
+        player2.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
+
+        int n = handVikings.transform.childCount;
+        for (int i = 0; i < n; i++)
+        {
+            handVikings.transform.GetChild(0).parent = null;
+        }
+        n = handLastKingdom.transform.childCount;
+        for (int i = 0; i < n; i++)
+        {
+            handLastKingdom.transform.GetChild(0).parent = null;
+        }
+
+        if(discardVikings.transform.childCount > 0)
+            discardVikings.transform.GetChild(0).parent = null;
+        if(discardLastkingDom.transform.childCount > 0)
+            discardLastkingDom.transform.GetChild(0).parent = null;
+        
+        UpdateStats();
+        InitGame();
+
+        menuReset.SetActive(false);
+        
+    }
     void InitGame()
     {   
         InitVikingsDeck();
@@ -1091,7 +1150,7 @@ public class StartGame : MonoBehaviour
         vikingsDeck.AddCard(new Card("Cuervo", 17, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 18, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 19, "Vikings", "Plata", 2, "range", 6));
-        // vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "all", 0, "", 14));
+        vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "all", 0, "", 14));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 21, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 22, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 23, "Vikings", "Plata", 1, "siege", 13));
@@ -1126,7 +1185,7 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 46, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 47, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 48, "Last Kingdom", "Plata", 1, "range", 13));
-        // lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "all", 0, "all", 14));
+        lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "all", 0, "all", 14));
         lastKingdomDeck.Shuffle();
     }
 
