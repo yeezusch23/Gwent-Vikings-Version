@@ -39,7 +39,16 @@ public class Deck
     public void Shuffle()
     {
         // Método para barajar las cartas en el mazo
-        cards.OrderBy(x => Guid.NewGuid());
+        Random rng = new Random();
+        int n = cards.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            Card value = cards[k];
+            cards[k] = cards[n];
+            cards[n] = value;
+        }
     }
 
     public Card GetCard(int x = 0)

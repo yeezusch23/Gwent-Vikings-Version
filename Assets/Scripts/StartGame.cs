@@ -133,7 +133,6 @@ public class StartGame : MonoBehaviour
                 card.transform.SetParent(discardLastkingDom.transform, false); 
             }
         }
-
     }
 
     void ClearRows()
