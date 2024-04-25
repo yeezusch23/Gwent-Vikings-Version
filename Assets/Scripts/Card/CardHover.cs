@@ -20,7 +20,7 @@ public class CardHover : MonoBehaviour
     public bool cardTop = false;
     public bool isHoverable = true;
     // public bool isLeader = false;
-    public GameObject showCard;
+    // public GameObject showCard;
 
     public EffectList effectList;
     
@@ -34,12 +34,12 @@ public class CardHover : MonoBehaviour
         controller = controllerObject.GetComponent<StartGame>();
 
         InitEffectList();
-        // Node.SetActive(true);
-        Node = GameObject.Find("showCard");
-        NodeText = GameObject.Find("Effect");
-        Node.GetComponent<Image> ().enabled = false;
-        NodeText.GetComponent<TextMeshProUGUI> ().enabled = false;
-        // Node.SetActive(false);
+        // controller.showCard.SetActive(true);
+        // controller.showCard = GameObject.Find("showCard");
+        // controller.showCardText = GameObject.Find("Effect");
+        // controller.showCard.GetComponent<Image> ().enabled = false;
+        // controller.showCardText.GetComponent<TextMeshProUGUI> ().enabled = false;
+        // controller.showCard.SetActive(false);
     }
 
         void InitEffectList()
@@ -77,7 +77,7 @@ public class CardHover : MonoBehaviour
     public void OnHoverExit()
     {   
         if(isHoverable)
-            ShowInfo();
+            HideInfo();
         if(gameObject != controller.selectedCard)
         {
             if (cardActive && cardTop)
@@ -104,66 +104,79 @@ public class CardHover : MonoBehaviour
     void ShowInfo()
     {   
         
-        // Debug.Log(Node);
-        // Node.SetActive(true);   
-        Node.GetComponent<Image>().enabled = true;
-        NodeText.GetComponent<TextMeshProUGUI> ().enabled = true;
-        // Debug.Log(Node.transform.Find("Image"));
+        // Debug.Log(controller.showCard);
+        // controller.showCard.SetActive(true);   
+        // controller.showCard.GetComponent<Image>().enabled = true;
+        // controller.showCardText.GetComponent<TextMeshProUGUI> ().enabled = true;
+        // Debug.Log(controller.showCard.transform.Find("Image"));
+        controller.showCard.SetActive(true);
         CardStats card = transform.Find("Stats").GetComponent<CardStats>();
         //Image
-        Node.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id.ToString());
-        Node.transform.Find("Image").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+        controller.showCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id.ToString());
+        controller.showCard.transform.Find("Image").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         //Type
         if (card.type == "Oro")
         {
-            Node.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/goldCard");
-            Node.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/goldCard");
+            controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else if (card.type == "Plata")
         { 
-            Node.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/silverCard");
-            Node.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/silverCard");
+            controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else {
-            Node.transform.Find("Type").GetComponent<Image>().sprite = null;
-            Node.transform.Find("Type").GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            controller.showCard.transform.Find("Type").GetComponent<Image>().sprite = null;
+            controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(0, 0, 0, 0);
         }  
         //Power
         if (card.type == "Oro")
         {
-            Node.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
-            Node.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(255, 255, 255);
+            controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
+            controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(255, 255, 255);
         } else if (card.type == "Plata")
         { 
-            Node.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
-            Node.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0);
+            controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
+            controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0);
         } else {
-            Node.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = "";
+            controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = "";
         }     
         //Row
         if (card.row == "close")
         {
-            Node.transform.Find("Row").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/close");
-            Node.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Row").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/close");
+            controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else if (card.row == "range")
         {
-            Node.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/range");
-            Node.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/range");
+            controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else if (card.row == "siege") 
         {
-            Node.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/siege");
-            Node.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/siege");
+            controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else if (card.row == "close_range")
         {
-            Node.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/close_range");
-            Node.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            controller.showCard.transform.Find("Row").GetComponent<Image>().sprite= Resources.Load<Sprite>("Cards/close_range");
+            controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         } else 
         {
-            Node.transform.Find("Row").GetComponent<Image>().sprite = null;
-            Node.transform.Find("Row").GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            controller.showCard.transform.Find("Row").GetComponent<Image>().sprite = null;
+            controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(0, 0, 0, 0);
         }
         //Effect
-        NodeText.GetComponent<TextMeshProUGUI>().enabled = true;
-        Node.transform.Find("Effect").GetComponent<TextMeshProUGUI>().text = effectList.effects[card.effect];
+        controller.showCard.transform.Find("Effect").GetComponent<TextMeshProUGUI>().text = effectList.effects[card.effect];
+        //Name
+        controller.showCard.transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.name;
+        //Card Type
+        if(card.type == "all")
+            controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = "Señuelo";
+        else
+            controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = card.type;
+
+
+
     }
 
-
+    void HideInfo()
+    {
+        controller.showCard.SetActive(false);
+    }
 }
