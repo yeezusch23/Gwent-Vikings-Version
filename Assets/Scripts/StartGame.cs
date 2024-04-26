@@ -676,7 +676,7 @@ public class StartGame : MonoBehaviour
         //Actualizar estadisticas
         UpdateStats();
     }
-
+    //!---------------------------------------------------------------------------------------------------------
     void AddPowerRow(Transform row, int cnt)
     {   
         int childs = row.parent.transform.Find("row").childCount;
