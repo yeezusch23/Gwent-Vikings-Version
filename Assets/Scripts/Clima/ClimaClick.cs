@@ -15,6 +15,7 @@ public class ClimaClick : MonoBehaviour
         controller = controllerObject.GetComponent<StartGame>();
     }
 
+    //Metodo para colocar las cartas clima
     public void OnClimaClick()
     {
         if (controller.selectedCard != null)

@@ -1,18 +1,15 @@
 using UnityEngine;
-using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.XR;
 
 public class CardSelect : MonoBehaviour
 {
     [HideInInspector]
     public GameObject controllerObject;
+    
     [HideInInspector]
     public StartGame controller;
 
     public bool isSelectable = true;
-
     public GameObject player1Field;
     public GameObject player2Field;
 
@@ -24,6 +21,7 @@ public class CardSelect : MonoBehaviour
         player2Field = GameObject.Find("Player2");
     }
 
+    //Cuando la carta este seleccionada
     public void OnCardSelect()
     {   
         if(isSelectable && !controller.playerMove)
@@ -62,6 +60,7 @@ public class CardSelect : MonoBehaviour
                 ActivatedField(2);
             }
         }
+        //Efecto del Señuelo
         if(controller.selectedCard != null){
             CardStats card = controller.selectedCard.transform.Find("Stats").GetComponent<CardStats>();
             string row = transform.parent.parent.name;
@@ -71,11 +70,9 @@ public class CardSelect : MonoBehaviour
                 hand = controller.handVikings;
             else
                 hand = controller.handLastKingdom;
-            // Debug.Log(row);
-            // Debug.Log(card.row);
+
             if (card.row == "Señuelo" && (row == "close" || row == "range" || row == "siege") && card.faction == faction)
             {
-                // controller.selectedCard.transform.SetParent(transform, false);
                 controller.selectedCard.transform.SetParent(transform.parent, false);
                 transform.SetParent(hand.transform, false);
                 
@@ -90,19 +87,15 @@ public class CardSelect : MonoBehaviour
                 transform.Find("Frame").GetComponent<Image>().color = new Color(0, 255, 0, 0);
                 transform.Find("Frame").GetComponent<Image>().color = new Color(0, 255, 0, 0);
 
-                // transform.Translate(0, 30, 0);
-                // cardTop = true;
-
                 controller.selectedCard = null;
                 controller.ResetField(1);
                 controller.ResetField(2);
                 controller.playerMove = true;
-                // Debug.Log("CAMBIAR");
             }
-            // Debug.Log("ENTRA");
         }
     }
 
+    //Activar campos segun  la carta seleccionada
     public void ActivatedField(int player) 
     {
         GameObject playerField;
@@ -137,7 +130,6 @@ public class CardSelect : MonoBehaviour
                 child.transform.Find("Frame").transform.GetComponent<Image>().color = new Color(0, 255, 0, 255);
             }
         }else{
-            // Debug.Log(card.row);
             Sprite spriteClose = player1Field.GetComponent<RowInfo>().closeSelected;
             Sprite spriteRange = player1Field.GetComponent<RowInfo>().rangeSelected;
             Sprite spriteSiege = player1Field.GetComponent<RowInfo>().siegeSelected;
@@ -171,8 +163,6 @@ public class CardSelect : MonoBehaviour
                 playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = spriteSiege;   
             }
         }
-        
-        
     }
 
 }

@@ -1,17 +1,14 @@
 using UnityEngine;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using UnityEngine.Events;
 
 public class RowClick : MonoBehaviour
 {   
     [HideInInspector]
     public GameObject controllerObject;
+  
     [HideInInspector]
     public StartGame controller;
     // Start is called before the first frame update
-    // public GameObject cardPrefab;
     UnityEvent unityEvent;
     void Start()
     {   
@@ -19,9 +16,9 @@ public class RowClick : MonoBehaviour
         controller = controllerObject.GetComponent<StartGame>();
     }
 
+    //Metodo para colocar las cartas en las filas
     public void OnRowClick()
     {   
-        // Debug.Log("Player : " + transform.parent.parent.name + "-> Row: " + transform.parent.name);
         if (controller.selectedCard != null)
         {     
             CardStats card = controller.selectedCard.transform.Find("Stats").GetComponent<CardStats>();
@@ -54,9 +51,7 @@ public class RowClick : MonoBehaviour
                     if(ok){
                         controller.ResetField(1);
                         controller.ResetField(2);
-                        // Debug.Log("HAKUNA");
                         controller.ActiveEffect(transform);
-                        // controller.DynamicEffects(transform);
                         controller.UpdateClimaEffects(transform);
                         if(controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2)
                             controller.playerMove = true;

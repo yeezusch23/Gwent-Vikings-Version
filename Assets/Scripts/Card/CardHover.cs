@@ -1,45 +1,34 @@
-using System.Diagnostics.Tracing;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 public class CardHover : MonoBehaviour
 {   
     [HideInInspector]
     public GameObject controllerObject;
+    
     [HideInInspector]
     public StartGame controller;
     public bool cardActive = true;
     public bool cardTop = false;
     public bool isHoverable = true;
-    // public bool isLeader = false;
-    // public GameObject showCard;
-
     public EffectList effectList;
     
-    // public GameObject bigCardPrefab;
-    // public StartGame showInfo;
-    // public GameObject cardStats;
     public void Start()
     {      
         
         controllerObject = GameObject.Find("StartGame");
         controller = controllerObject.GetComponent<StartGame>();
 
+        //Inicializar efectos de las cartas
         InitEffectList();
-        // controller.showCard.SetActive(true);
-        // controller.showCard = GameObject.Find("showCard");
-        // controller.showCardText = GameObject.Find("Effect");
-        // controller.showCard.GetComponent<Image> ().enabled = false;
-        // controller.showCardText.GetComponent<TextMeshProUGUI> ().enabled = false;
-        // controller.showCard.SetActive(false);
     }
 
-        void InitEffectList()
+    //Efectos
+    void InitEffectList()
     {
-        effectList.setEffect("Aumenta en 2 el poder de las cartas de la fila donde es colocada, luego es enviada al cementerio");
-        effectList.setEffect("Aumenta en 1 el poder de las cartas de la fila donde es colocada, luego es enviada al cementerio");
+        effectList.setEffect("Aumenta en 2 el poder de las cartas de la fila donde es colocada");
+        effectList.setEffect("Aumenta en 1 el poder de las cartas de la fila donde es colocada");
         effectList.setEffect("Reduce en 1 la fuerza de todas las unidades cuerpo a cuerpo en el campo de batalla");
         effectList.setEffect("Reduce en 1 la potencia de los ataques a distancia de todas las unidades en el campo de batalla");
         effectList.setEffect("Despeja el clima eliminando todas las cartas de tipo clima");
@@ -54,11 +43,12 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Multiplica por n su ataque, siendo n la cantidad de cartas iguales a ella en el campo");
         effectList.setEffect("Permite colocar una carta con poder 0 en el lugar de una carta del campo para regresar esta a la mano");
     }
-      public void OnHoverEnter()
+    
+    //Desplazar carta cuando esta en hover
+    public void OnHoverEnter()
     {   
         if(isHoverable)
             ShowInfo();
-        // Debug.Log("ENTER    cardActive: " + cardActive + " cardTop:" + cardTop);
         if(gameObject != controller.selectedCard)
         {
             if (cardActive && !cardTop)
@@ -68,6 +58,7 @@ public class CardHover : MonoBehaviour
         } 
     }
 
+    //Desplazar carta cuando esta en hover
     public void OnHoverExit()
     {   
         if(isHoverable)
@@ -79,30 +70,25 @@ public class CardHover : MonoBehaviour
                 TranslateDown();
             }
         }
-        
-        // Debug.Log("EXIT   cardActive: " + cardActive + " cardTop:" + cardTop);
-        //Debug.Log("Hover Exit");
     }
 
+    //Trazladar hacia arriba
     public void TranslateUp()
     {
         transform.Translate(0, 30, 0);
         cardTop = true;
     }
+    
+    //Trazladar hacia abajo
     public void TranslateDown()
     {
         transform.Translate(0, -30, 0);
         cardTop = false;
     }
 
+    //Mostrar informacion de la carta en hover
     void ShowInfo()
     {   
-        
-        // Debug.Log(controller.showCard);
-        // controller.showCard.SetActive(true);   
-        // controller.showCard.GetComponent<Image>().enabled = true;
-        // controller.showCardText.GetComponent<TextMeshProUGUI> ().enabled = true;
-        // Debug.Log(controller.showCard.transform.Find("Image"));
         controller.showCard.SetActive(true);
         CardStats card = transform.Find("Stats").GetComponent<CardStats>();
         //Image
@@ -161,11 +147,9 @@ public class CardHover : MonoBehaviour
         controller.showCard.transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.name;
         //Card Type
         controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = card.type;
-
-
-
     }
 
+    //Ocultar informacion de la carta
     void HideInfo()
     {
         controller.showCard.SetActive(false);

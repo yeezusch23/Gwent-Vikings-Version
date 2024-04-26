@@ -676,7 +676,10 @@ public class StartGame : MonoBehaviour
         //Actualizar estadisticas
         UpdateStats();
     }
-    //!---------------------------------------------------------------------------------------------------------
+    
+    /*
+    Efecto (#2, #3)
+    *Aumenta en 1 (o 2) el poder de las cartas de la fila donde es colocada*/
     void AddPowerRow(Transform row, int cnt)
     {   
         int childs = row.parent.transform.Find("row").childCount;
@@ -690,6 +693,7 @@ public class StartGame : MonoBehaviour
         UpdateStats();
     }
 
+    //Actualizar estadisticas
     public void UpdateStats()
     {   
         ResetField(1);
@@ -794,6 +798,7 @@ public class StartGame : MonoBehaviour
         }
     }
 
+    //Reiniciar la partida
     public void ResetGame()
     {   
         gameState = GameState.PLAYER1;
@@ -835,6 +840,8 @@ public class StartGame : MonoBehaviour
         menuReset.SetActive(false);
         
     }
+    
+    //Iniciar la partida
     void InitGame()
     {   
         InitVikingsDeck();
@@ -851,6 +858,8 @@ public class StartGame : MonoBehaviour
         }
 
     }
+
+    //Reinicar campos de batalla
     public void ResetField(int player) 
     {
         GameObject playerField;
@@ -899,11 +908,9 @@ public class StartGame : MonoBehaviour
             Transform child = playerField.transform.Find("siege").transform.Find("row").GetChild(i);
             child.transform.Find("Frame").transform.GetComponent<Image>().color = new Color(0, 255, 0, 0);
         }
-        // Light off the weather board and deselect weather card
-        // climaField.GetComponent<Image>().sprite = climaField.GetComponent<WeatherManager>().weather;
-        // climaField.GetComponent<WeatherManager>().isWeatherCard = false;
     }
 
+    //Instanciar Carta
     void InstantiateCard (Card card, string faction) 
     {
         GameObject instantiateCard = Instantiate(cardPrefab);
@@ -979,11 +986,9 @@ public class StartGame : MonoBehaviour
         // Debug.Log(card.name);
     }
 
-    
-    
+    //Inicializar el mazo Vikings
     void InitVikingsDeck()
     {   
-        
         vikingsDeck.AddCard(new Card("Niebla", 0, "Neutral", "Clima", 0, "Clima", 3));
         vikingsDeck.AddCard(new Card("Tormenta Nórdica", 2, "Neutral", "Clima", 0, "Clima", 2));
         vikingsDeck.AddCard(new Card("Odin", 4, "Vikings", "Aumento", 0, "Aumento", 0));
@@ -1009,8 +1014,11 @@ public class StartGame : MonoBehaviour
         vikingsDeck.AddCard(new Card("Catapulta Vikinga", 24, "Vikings", "Plata", 4, "siege", 12));
         vikingsDeck.AddCard(new Card("Catapulta Vikinga", 25, "Vikings", "Plata", 4, "siege", 12));
         vikingsDeck.AddCard(new Card("Catapulta Vikinga", 26, "Vikings", "Plata", 4, "siege", 12));
+        //Desordenar mazo
         vikingsDeck.Shuffle();
     }
+
+    //Inicializar el mazo Last Kingdom
     void InitLastKingdomDeck()
     {
         lastKingdomDeck.AddCard(new Card("Niebla", 1, "Neutral", "Clima", 0, "Clima", 3));
@@ -1038,6 +1046,7 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 47, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 48, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "Señuelo", 0, "Señuelo", 14));
+        //Desordenar mazo
         lastKingdomDeck.Shuffle();
     }
 

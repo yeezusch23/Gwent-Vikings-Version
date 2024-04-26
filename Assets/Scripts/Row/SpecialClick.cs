@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpecialClick : MonoBehaviour
@@ -15,6 +13,7 @@ public class SpecialClick : MonoBehaviour
         controller = controllerObject.GetComponent<StartGame>();
     }
 
+    //Metodo para colocar las cartas aumento
     public void OnSpecialClick()
     {   
         if (controller.selectedCard != null)

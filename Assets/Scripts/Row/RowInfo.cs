@@ -15,10 +15,6 @@ public class RowInfo : MonoBehaviour
     public Sprite clima;
     public Sprite climaSelected;
 
-    
-    // public Sprite orangeCircle;
-    // public Sprite blueCircle;
-
     public List<GameObject> listRows;
     List<GameObject> rowFields;
 
@@ -28,8 +24,7 @@ public class RowInfo : MonoBehaviour
     }
 
     public void infoField(GameObject row)
-    {   
-        
+    {      
         rowFields.Add(row);
         rowFields = listRows;
     }
