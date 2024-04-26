@@ -65,6 +65,7 @@ public class CardSelect : MonoBehaviour
         if(controller.selectedCard != null){
             CardStats card = controller.selectedCard.transform.Find("Stats").GetComponent<CardStats>();
             string row = transform.parent.parent.name;
+            string faction = transform.Find("Stats").GetComponent<CardStats>().faction;
             GameObject hand;
             if (controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2PASS)
                 hand = controller.handVikings;
@@ -72,7 +73,7 @@ public class CardSelect : MonoBehaviour
                 hand = controller.handLastKingdom;
             // Debug.Log(row);
             // Debug.Log(card.row);
-            if (card.row == "Señuelo" && (row == "close" || row == "range" || row == "siege"))
+            if (card.row == "Señuelo" && (row == "close" || row == "range" || row == "siege") && card.faction == faction)
             {
                 // controller.selectedCard.transform.SetParent(transform, false);
                 controller.selectedCard.transform.SetParent(transform.parent, false);

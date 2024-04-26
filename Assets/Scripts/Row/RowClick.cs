@@ -56,7 +56,7 @@ public class RowClick : MonoBehaviour
                         controller.ResetField(2);
                         // Debug.Log("HAKUNA");
                         controller.ActiveEffect(transform);
-                        controller.DynamicEffects(transform);
+                        // controller.DynamicEffects(transform);
                         controller.UpdateClimaEffects(transform);
                         if(controller.gameState == GameState.PLAYER1 || controller.gameState == GameState.PLAYER2)
                             controller.playerMove = true;
