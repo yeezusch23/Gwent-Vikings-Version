@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+//Variable 
 public enum GameState { PLAYER1, PLAYER2, PLAYER1PASS, PLAYER2PASS }
-public enum RoundState {ROUND1, ROUND2, ROUND3}
 
 public class StartGame : MonoBehaviour
 {   
@@ -302,6 +302,7 @@ public class StartGame : MonoBehaviour
     public void ActiveEffect(Transform row)
     {   
         // Debug.Log(card.transform.GetChild(card.transform.childCount-1).name);
+        Debug.Log(row.name);
         int n = row.transform.GetChild(row.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
         if(n == 0)
             AddPowerRow(row, 2);
@@ -1052,6 +1053,25 @@ public class StartGame : MonoBehaviour
         
         Sprite spriteClima = playerField.GetComponent<RowInfo>().clima;
         climaField.GetComponent<Image>().sprite = spriteClima;
+
+        int childs = playerField.transform.Find("close").transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {   
+            Transform child = playerField.transform.Find("close").transform.Find("row").GetChild(i);
+            child.transform.Find("Frame").transform.GetComponent<Image>().color = new Color(0, 255, 0, 0);
+        }
+        childs = playerField.transform.Find("range").transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {   
+            Transform child = playerField.transform.Find("range").transform.Find("row").GetChild(i);
+            child.transform.Find("Frame").transform.GetComponent<Image>().color = new Color(0, 255, 0, 0);
+        }
+        childs = playerField.transform.Find("siege").transform.Find("row").childCount;
+        for(int i = 0; i < childs; i++)
+        {   
+            Transform child = playerField.transform.Find("siege").transform.Find("row").GetChild(i);
+            child.transform.Find("Frame").transform.GetComponent<Image>().color = new Color(0, 255, 0, 0);
+        }
         // Light off the weather board and deselect weather card
         // climaField.GetComponent<Image>().sprite = climaField.GetComponent<WeatherManager>().weather;
         // climaField.GetComponent<WeatherManager>().isWeatherCard = false;
@@ -1155,7 +1175,7 @@ public class StartGame : MonoBehaviour
         vikingsDeck.AddCard(new Card("Cuervo", 17, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 18, "Vikings", "Plata", 2, "range", 6));
         vikingsDeck.AddCard(new Card("Cuervo", 19, "Vikings", "Plata", 2, "range", 6));
-        vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "all", 0, "", 14));
+        vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "Señuelo", 0, "Señuelo", 14));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 21, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 22, "Vikings", "Plata", 1, "siege", 13));
         vikingsDeck.AddCard(new Card("Ariete Nórdico", 23, "Vikings", "Plata", 1, "siege", 13));
@@ -1190,7 +1210,7 @@ public class StartGame : MonoBehaviour
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 46, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 47, "Last Kingdom", "Plata", 1, "range", 13));
         lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 48, "Last Kingdom", "Plata", 1, "range", 13));
-        lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "all", 0, "all", 14));
+        lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "Señuelo", 0, "Señuelo", 14));
         lastKingdomDeck.Shuffle();
     }
 

@@ -7,12 +7,6 @@ using Unity.VisualScripting;
 public class CardHover : MonoBehaviour
 {   
     [HideInInspector]
-    public GameObject Node;
-    
-    [HideInInspector]
-    public GameObject NodeText;
-    
-    [HideInInspector]
     public GameObject controllerObject;
     [HideInInspector]
     public StartGame controller;
@@ -166,10 +160,7 @@ public class CardHover : MonoBehaviour
         //Name
         controller.showCard.transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.name;
         //Card Type
-        if(card.type == "all")
-            controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = "Señuelo";
-        else
-            controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = card.type;
+        controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = card.type;
 
 
 
