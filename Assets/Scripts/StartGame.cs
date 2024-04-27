@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
- 
+using System.IO;
+
 public enum GameState { PLAYER1, PLAYER2, PLAYER1PASS, PLAYER2PASS }
 
 public class StartGame : MonoBehaviour
@@ -109,20 +110,20 @@ public class StartGame : MonoBehaviour
         AddCardDeck("Last Kingdom");
         //Actualizar estadisticas
         UpdateStats();
-
+        
         //Terminar la partida si al menos uno no tiene gemas
         if(gemsVikingsCount == 0 && gemsLastKingdomCount == 0)
         {
             menuReset.SetActive(true);
-            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "EMPATE";
+            menuReset.transform.Find("Ganador").GetComponent<TextMeshProUGUI>().text = "EMPATE";
         }else if(gemsVikingsCount == 0)
         {
             menuReset.SetActive(true);
-            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "JUGADOR 2 GANA";
+            menuReset.transform.Find("Ganador").GetComponent<TextMeshProUGUI>().text = "JUGADOR 2 GANA";
         } else if(gemsLastKingdomCount == 0)
         {
             menuReset.SetActive(true);
-            menuReset.transform.Find("text").GetComponent<TextMeshProUGUI>().text = "JUGADOR 1 GANA";
+            menuReset.transform.Find("Ganador").GetComponent<TextMeshProUGUI>().text = "JUGADOR 1 GANA";
         }
 
     }
@@ -799,6 +800,7 @@ public class StartGame : MonoBehaviour
     }
 
     //Reiniciar la partida
+    //!Metodo sin uso
     public void ResetGame()
     {   
         gameState = GameState.PLAYER1;
