@@ -91,6 +91,7 @@ public class CardSelect : MonoBehaviour
                 controller.ResetField(1);
                 controller.ResetField(2);
                 controller.playerMove = true;
+                controller.UpdateStats();
             }
         }
     }
