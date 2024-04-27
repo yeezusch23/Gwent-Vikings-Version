@@ -261,14 +261,18 @@ public class StartGame : MonoBehaviour
         if(row.transform.childCount > 0) {
             Transform card = row.transform.GetChild(row.transform.childCount - 1);
             string cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
-            string cardRow = card.transform.Find("Stats").GetComponent<CardStats>().row;
+            string cardRow = row.parent.name;
             if(cardType != "Oro")
             {   
                 //Efecto del clima
-                if(cardRow == "close" || cardRow == "range" || cardRow == "close_range")
+                for(int i  = 0; i < climaField.transform.childCount; i++)
                 {   
-                    card.transform.Find("Stats").GetComponent<CardStats>().power -= climaField.transform.childCount;
-                    card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                    int cardClimaEffect = climaField.transform.GetChild(i).Find("Stats").GetComponent<CardStats>().effect;
+                    if((cardRow == "close" && cardClimaEffect == 2) || (cardRow == "range" && cardClimaEffect == 3))
+                    {         
+                        card.transform.Find("Stats").GetComponent<CardStats>().power -= 1;
+                        card.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+                    } 
                 }
                 //Efecto de los aumentos
                 if(row.parent.Find("special").transform.childCount > 0)
@@ -657,11 +661,12 @@ public class StartGame : MonoBehaviour
     *Reduce en 1 la potencia de los (ataques a distancia) de todas las unidades en el campo de batalla*/
     void ReducePowerRow(string rowType, int add)
     {   
+        Debug.Log(rowType);
         int childs = player1.transform.Find(rowType).transform.Find("row").childCount;
         for(int i = 0; i < childs; i++)
         {   
             Transform child = player1.transform.Find(rowType).transform.Find("row").GetChild(i);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro" || child.transform.Find("Stats").GetComponent<CardStats>().type == "Despeje") continue;
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += add;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
@@ -670,7 +675,7 @@ public class StartGame : MonoBehaviour
         {   
             Transform child = player2.transform.Find(rowType).transform.Find("row").GetChild(i);
             Debug.Log(child.transform.name);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro" || child.transform.Find("Stats").GetComponent<CardStats>().type == "Despeje") continue;
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += add;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
