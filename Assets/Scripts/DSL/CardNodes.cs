@@ -12,4 +12,3 @@ public class ProgramNode : IASTNode
         this.nodes = nodes;
     }
 }
-

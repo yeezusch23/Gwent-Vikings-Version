@@ -27,7 +27,7 @@ public class Context : IASTNode
             return variables[key.lexeme];
         }
         if (scope != null) return scope.Get(key);
-        //TODO: Hcaer que imprima el error en la consola
+        //TODO: Hacer que imprima el error en la consola
         throw new Exception("variable was not found context");
     }
 

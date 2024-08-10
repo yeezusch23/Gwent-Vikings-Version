@@ -55,6 +55,6 @@ public static class DSL
     public static void Error(Token token, string message)
     {
         if (token.type == TokenType.EOF) Report(token.line, token.column, "at end", message);
-        else Report(token.line, token.column, $"en'{token.lexeme}'", message);
+        else Report(token.line, token.column, $"at'{token.lexeme}'", message);
     }
 }

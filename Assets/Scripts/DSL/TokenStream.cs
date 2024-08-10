@@ -5,8 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 public class TokenStream : IEnumerable<Token>
 {   
-    private List<Token> tokens;
-    private int position;
+    public List<Token> tokens;
+    public int position;
     public int Position { get { return position; } }   
     string CurrentTokenName { get { return tokens[position].lexeme; } } 
 
@@ -44,6 +44,7 @@ public class TokenStream : IEnumerable<Token>
         return Peek().type == TokenType.EOF;
     }
     //------------------------------------
+    //Manejo de errores
     bool Check(List<TokenType> types)
     {
         foreach (TokenType type in types)
@@ -52,55 +53,54 @@ public class TokenStream : IEnumerable<Token>
         }
         return false;
     }
-    void Synchronize(List<TokenType> moduleTypes)
+    void FlowReset(List<TokenType> moduleTypes)
     {
         if (moduleTypes == null) return;
         while (!EOList())
         {
             if (Check(moduleTypes)) return;
             Next();
-            if (moduleTypes.Equals(Block.synchroTypes) && tokens[position - 1].type == TokenType.StatementSeparator) return;
+            if (moduleTypes.Equals(Block.moduleTypes) && tokens[position - 1].type == TokenType.StatementSeparator) return;
         }
     }
-
-    public void Error(Token token, string message, List<TokenType> synchroTypes)
+    public void Error(Token token, string message, List<TokenType> moduleTypes)
     {
-        Synchronize(synchroTypes);
+        FlowReset(moduleTypes);
         DSL.Error(token, message);
+    }
+    public Token Consume(TokenType type, string message, List<TokenType> moduleTypes)
+    {
+        if (Check(type)) return Next();
+        Error(Peek(), message, moduleTypes);
+        return null;
+    }
+
+    public bool Match(List<TokenType> types)
+    {
+        foreach (TokenType type in types)
+        {
+            if (Check(type))
+            {
+                Next();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ExpressionType GetStringType(string s)
+    {   
+        if(s == "Number") return ExpressionType.Number;
+        if(s == "String") return ExpressionType.String;
+        if(s == "Bool") return ExpressionType.Bool;
+        return ExpressionType.Null;
     }
 
     //     //Raises an error and reports it
     
 
     // //Tries to match the current token with a list of types and advances if it matches with any of the tokens in the list
-    // bool Match(List<TokenType> types)
-    // {
-    //     foreach (TokenType type in types)
-    //     {
-    //         if (Check(type))
-    //         {
-    //             Advance();
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-    // //Tries to match the current token with the given type and advances if it matches
     
-
-    // //Checks if the current token matches the given type
-    
-
-    // //TChecks if the current token matches an element from a list of types 
-
-
-    // //Advances to the next token
-    
-
-    
-
-
 
     // //Returns the next token
     // Token PeekNext()
@@ -109,24 +109,7 @@ public class TokenStream : IEnumerable<Token>
     //     else return tokens[current + 1];
     // }
 
-    // //Returns the previous token
-    // Token Previous()
-    // {
-    //     return tokens[current - 1];
-    // }
-
-    // //Consumes the current token if it matches the given type, otherwise thwros an error
-    // Token Consume(TokenType type, string message, List<TokenType> synchroTypes)
-    // {
-    //     if (Check(type)) return Advance();
-    //     Error(Peek(), message, synchroTypes);
-    //     return null;
-    // }
-
-    // //Sinchronizes the parser state after an error based on a given list
-    // //of tokens that determine where to stop synchronization
-
-
+    
 
     
     public IEnumerator<Token> GetEnumerator()
