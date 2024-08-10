@@ -43,6 +43,8 @@ public class ButtonClick : MonoBehaviour
             controller.button1.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             if(controller.playerMove == false)
             controller.UpdateStats();
+            controller.roundCount++;
+            controller.changedCard = 0;
         } else if (transform.name == "Button2" && controller.gameState == GameState.PLAYER2)
         {   
             //Si es el turno del jugador 2 y pasa el turno
@@ -59,18 +61,24 @@ public class ButtonClick : MonoBehaviour
             controller.button2.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
             controller.button2.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.UpdateStats();
+            controller.roundCount++;
+            controller.changedCard = 0;
         } else if(transform.name == "Button2" && controller.gameState == GameState.PLAYER1PASS)
         {   
             //Restablecer los colores al boton            
             controller.button2.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
             controller.button2.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.CloseRound();
+            controller.roundCount++;
+            controller.changedCard = 0;
         }else if(transform.name == "Button1" && controller.gameState == GameState.PLAYER2PASS)
         {   
             //Restablecer los colores al boton            
             controller.button1.transform.Find("text").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0, 255);
             controller.button1.transform.GetComponent<Image>().color = new Color(255, 255, 255, 255);
             controller.CloseRound();
+            controller.roundCount++;
+            controller.changedCard = 0;
         }
     }
 

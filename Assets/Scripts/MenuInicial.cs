@@ -7,6 +7,10 @@ public class MenuInicial : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
+    public void CreateCard()
+    {   
+        SceneManager.LoadScene("DSLCompile");
+    }
     public void Exit()
     {   
         Debug.Log("Salir...");

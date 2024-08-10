@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MenuReset.unity
     guid: 0194f56f9e767684fb23291d45597d7b
+  - enabled: 1
+    path: Assets/Scenes/DSLCompile.unity
+    guid: 29861b6546332bd45adf71ee275ba384
   m_configObjects: {}

@@ -62,6 +62,9 @@ public class StartGame : MonoBehaviour
     public bool playerMove = false;
 
     public GameObject menuReset;
+    
+    public int roundCount = 0;
+    public int changedCard = 0;
     void Start () 
     {   
         //Iniciar Juego
@@ -918,7 +921,7 @@ public class StartGame : MonoBehaviour
     }
 
     //Instanciar Carta
-    void InstantiateCard (Card card, string faction) 
+    public void InstantiateCard (Card card, string faction) 
     {
         GameObject instantiateCard = Instantiate(cardPrefab);
         instantiateCard.name = card.id.ToString();
@@ -985,7 +988,7 @@ public class StartGame : MonoBehaviour
             instantiateCard.transform.SetParent(handVikings.transform, false);
             instantiateCard.transform.GetComponent<CardSelect>().isSelectable = true;
         } else
-        {
+        {   
             instantiateCard.transform.Rotate(0, 0, 180);
             instantiateCard.transform.SetParent(handLastKingdom.transform, false);
             instantiateCard.transform.GetComponent<CardHover>().isHoverable = false;
