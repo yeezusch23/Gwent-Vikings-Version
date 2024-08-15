@@ -1,19 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine;
+
+
 
 [System.Serializable]
-public class Card 
+public abstract class Card 
 {
+    public Player owner;
     public string name { get; set; }
     public int id { get; set; }
     public string faction { get; set; }
-    public string type { get; set; }
+    public Type? type { get; set; }
     public int power { get; set; }
     public string row { get; set; }
     public int effect { get; set; }
 
-    public Card(string name, int id, string faction, string type, int power, string row, int effect)   
+        public List<Position> positions;
+
+    public enum Position
+    {
+        Melee, Ranged, Siege,
+    }
+
+    public Card(string name, int id, string faction, Type? type, int power, string row, int effect)   
     {
         this.name = name;
         this.id = id;
@@ -22,9 +35,38 @@ public class Card
         this.power = power;
         this.row = row;
         this.effect = effect;
+        
+    }
+
+    public enum Type
+    {
+        Leader,
+        Golden,
+        Silver,
+        Weather,
+        Boost,
+        Decoy,
+        Clear,
     }
 }
 
+[Serializable]
+public abstract class FieldCard : Card
+{
+    public FieldCard(string name, int id, string faction, Type type, int power, string row, int effect, int power2):
+        base(name, id, faction, type, power, row, effect){
+            for (int i = 0; i<4; i++) powers[i] = power;
+        }
+    /*
+    It is necessary to save the values of different power layers 
+    powers[0]: holds de basepower value
+    powers[1]: holds extra modifications resulting power (user-created effects)
+    powers[2]: holds the boostaffected power
+    powers[3]: holds the climate affected power
+    */
+
+    public int[] powers = new int[4];
+}
 [System.Serializable]
 public class Deck
 {
@@ -103,6 +145,12 @@ public class Player
     public int cardsDeck { get; set; }
     public int gems { get; set; }
 
+    public GameComponent hand;
+    public GameComponent deck;
+    public GameComponent field;
+    public GameComponent graveyard;
+
+
     public Player()
     {
         power = 0;
@@ -112,5 +160,61 @@ public class Player
         cardsHand = 10;
         cardsDeck = 14;
         gems = 2;
+    }
+
+    public Player Other()
+    {
+        if (this == GlobalContext.gameMaster.Player1) return GlobalContext.gameMaster.Player2;
+        return GlobalContext.gameMaster.Player1;
+    }
+}
+
+[System.Serializable]
+
+public abstract class GameComponent : MonoBehaviour
+{
+    public Player owner;
+    public List<Card> cards;
+    public abstract void Push(Card card);
+    public abstract Card Pop();
+    public abstract void SendBottom(Card card);
+    public abstract void Remove(Card card);
+    public int Size {get => cards.Count;}
+    public void Shuffle()
+    {
+        for (int i=cards.Count-1;i>0;i--)
+        {
+            int randomIndex=UnityEngine.Random.Range(0,i+1);
+            Card container=cards[i];
+            cards[i]=cards[randomIndex];
+            cards[randomIndex]=container;
+        }
+    }
+
+    void Awake(){
+        cards = new List<Card>();
+    }
+}
+
+[System.Serializable]
+public static class GlobalContext
+{
+    public static StartGame gameMaster;
+    public static GameComponent Board{get => gameMaster.board;}   
+    public static GameComponent Hand(Player player)
+    {
+        return player.hand;
+    }
+    public static GameComponent Deck(Player player)
+    {
+        return player.deck;
+    }
+    public static GameComponent Field(Player player)
+    {
+        return player.field;
+    }
+    public static GameComponent Graveyard(Player player)
+    {
+        return player.graveyard;
     }
 }

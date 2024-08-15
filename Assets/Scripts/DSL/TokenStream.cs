@@ -45,7 +45,7 @@ public class TokenStream : IEnumerable<Token>
     }
     //------------------------------------
     //Manejo de errores
-    bool Check(List<TokenType> types)
+    public bool Check(List<TokenType> types)
     {
         foreach (TokenType type in types)
         {
