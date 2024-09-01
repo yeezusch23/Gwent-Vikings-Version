@@ -1,8 +1,12 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System;
 using System.Linq;
-using System.Linq.Expressions;
+
+
 public class TokenStream : IEnumerable<Token>
 {   
     public List<Token> tokens;
@@ -10,9 +14,9 @@ public class TokenStream : IEnumerable<Token>
     public int Position { get { return position; } }   
     string CurrentTokenName { get { return tokens[position].lexeme; } } 
 
-    public TokenStream(IEnumerable<Token> tokens)
+    public TokenStream(List<Token> tokens)
     {
-        this.tokens = new List<Token>();
+        this.tokens = tokens;
         position = 0;
     }
 
@@ -36,7 +40,7 @@ public class TokenStream : IEnumerable<Token>
         return false;
     }
     public Token Peek()
-    {
+    {   
         return tokens[position];
     }
     public bool EOList()

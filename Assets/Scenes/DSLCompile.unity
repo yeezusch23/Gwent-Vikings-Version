@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 88243619}
   - component: {fileID: 88243618}
   - component: {fileID: 88243617}
+  - component: {fileID: 88243620}
   m_Layer: 0
   m_Name: ButtonSalir
   m_TagString: Untagged
@@ -341,7 +342,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 88243618}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 88243620}
+        m_TargetAssemblyTypeName: DSLManager, Assembly-CSharp
+        m_MethodName: MenuInicial
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &88243618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +393,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 88243615}
   m_CullTransparentMesh: 1
+--- !u!114 &88243620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88243615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79067b6f6546ea24cb4d453736ace771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 0}
+  Console: {fileID: 0}
+  Text: {fileID: 0}
 --- !u!1 &134357782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,6 +2163,7 @@ GameObject:
   - component: {fileID: 1684662539}
   - component: {fileID: 1684662538}
   - component: {fileID: 1684662537}
+  - component: {fileID: 1684662540}
   m_Layer: 0
   m_Name: code
   m_TagString: Untagged
@@ -2299,3 +2328,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684662535}
   m_CullTransparentMesh: 1
+--- !u!114 &1684662540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684662535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79067b6f6546ea24cb4d453736ace771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 1684662535}
+  Console: {fileID: 682577848}
+  Text: {fileID: 0}

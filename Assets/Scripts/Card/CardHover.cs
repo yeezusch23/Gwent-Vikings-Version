@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class CardHover : MonoBehaviour
 {   
@@ -42,6 +43,8 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Limpia la fila del campo (no vacia) del rival con menos unidades");
         effectList.setEffect("Multiplica por n su ataque, siendo n la cantidad de cartas iguales a ella en el campo");
         effectList.setEffect("Permite colocar una carta con poder 0 en el lugar de una carta del campo para regresar esta a la mano");
+        
+        effectList.setEffect("Carta creada, sin efecto");
     }
     
     //Desplazar carta cuando esta en hover
@@ -95,11 +98,11 @@ public class CardHover : MonoBehaviour
         controller.showCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id.ToString());
         controller.showCard.transform.Find("Image").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         //Type
-        if (card.type == "Oro")
+        if (card.type == Card.Type.Golden)
         {
             controller.showCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/goldCard");
             controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
-        } else if (card.type == "Plata")
+        } else if (card.type == Card.Type.Silver)
         { 
             controller.showCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/silverCard");
             controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(255, 255, 255, 255);
@@ -108,11 +111,11 @@ public class CardHover : MonoBehaviour
             controller.showCard.transform.Find("Type").GetComponent<Image>().color = new Color(0, 0, 0, 0);
         }  
         //Power
-        if (card.type == "Oro")
+        if (card.type == Card.Type.Golden)
         {
             controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
             controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(255, 255, 255);
-        } else if (card.type == "Plata")
+        } else if (card.type == Card.Type.Silver)
         { 
             controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
             controller.showCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0);
@@ -146,7 +149,7 @@ public class CardHover : MonoBehaviour
         //Name
         controller.showCard.transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.name;
         //Card Type
-        controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = card.type;
+        controller.showCard.transform.Find("CardType").GetComponent<TextMeshProUGUI>().text = Tools.GetCardTypeString(card.type);
     }
 
     //Ocultar informacion de la carta

@@ -110,7 +110,7 @@ public class CardSelect : MonoBehaviour
         
         CardStats card = controller.selectedCard.transform.Find("Stats").GetComponent<CardStats>();
         
-        if(card.type == "Señuelo")
+        if(card.type == Card.Type.Decoy)
         {   
             int childs = playerField.transform.Find("close").transform.Find("row").childCount;
             for(int i = 0; i < childs; i++)
@@ -159,10 +159,18 @@ public class CardSelect : MonoBehaviour
             } else if (card.row == "range")
             {
                 playerField.transform.Find("range").Find("row").GetComponent<Image>().sprite = spriteRange;
-            } else
+            } else if (card.row == "siege")
             {
                 playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = spriteSiege;   
-            }
+            }else if(card.row == "close_siege") 
+            {
+                playerField.transform.Find("close").Find("row").GetComponent<Image>().sprite = spriteClose;
+                playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = spriteSiege;
+            } else if(card.row == "range_siege") 
+            {
+                playerField.transform.Find("range").Find("row").GetComponent<Image>().sprite = spriteRange;
+                playerField.transform.Find("siege").Find("row").GetComponent<Image>().sprite = spriteSiege;   
+            } 
         }
     }
 

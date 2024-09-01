@@ -12,6 +12,8 @@ public class StartGame : MonoBehaviour
 
     public GameComponent board;
     public GameObject cardPrefab;
+    
+    public Deck CreatedCards;
     public Deck vikingsDeck;
     public Deck lastKingdomDeck;
     public GameObject handVikings;
@@ -71,6 +73,16 @@ public class StartGame : MonoBehaviour
     public int changedCard = 0;
     void Start () 
     {   
+        // if(DataManager.myStringList.Count == 0)
+        // {
+        //     Debug.Log("Aun no hay cartas creadas");
+        // }
+        // for(int i = 0; i < DataManager.myStringList.Count; i++){
+        //     Debug.Log(DataManager.myStringList[i]);
+        // }
+
+
+
         //Iniciar Juego
         InitGame();
     }
@@ -267,9 +279,9 @@ public class StartGame : MonoBehaviour
     {   
         if(row.transform.childCount > 0) {
             Transform card = row.transform.GetChild(row.transform.childCount - 1);
-            string cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
+            Card.Type? cardType = card.transform.Find("Stats").GetComponent<CardStats>().type;
             string cardRow = row.parent.name;
-            if(cardType != "Oro")
+            if(cardType != Card.Type.Golden)
             {   
                 //Efecto del clima
                 for(int i  = 0; i < climaField.transform.childCount; i++)
@@ -673,7 +685,7 @@ public class StartGame : MonoBehaviour
         for(int i = 0; i < childs; i++)
         {   
             Transform child = player1.transform.Find(rowType).transform.Find("row").GetChild(i);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == Card.Type.Golden) continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += add;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
@@ -682,7 +694,7 @@ public class StartGame : MonoBehaviour
         {   
             Transform child = player2.transform.Find(rowType).transform.Find("row").GetChild(i);
             Debug.Log(child.transform.name);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == Card.Type.Golden) continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += add;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
@@ -699,7 +711,7 @@ public class StartGame : MonoBehaviour
         for(int i = 0; i < childs; i++)
         {
             Transform child = row.parent.transform.Find("row").GetChild(i);
-            if(child.transform.Find("Stats").GetComponent<CardStats>().type == "Oro") continue;
+            if(child.transform.Find("Stats").GetComponent<CardStats>().type == Card.Type.Golden) continue;
             child.transform.Find("Stats").GetComponent<CardStats>().power += cnt;
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = child.transform.Find("Stats").GetComponent<CardStats>().power.ToString();
         }
@@ -858,13 +870,21 @@ public class StartGame : MonoBehaviour
     //Iniciar la partida
     void InitGame()
     {   
+        //Incializar cartas creadas
+        for(int i = 0; i < DataManager.myStringList.Count; i++){
+            vikingsDeck.AddCard(DataManager.myStringList[i]);
+            lastKingdomDeck.AddCard(DataManager.myStringList[i]);
+        }
+
         InitVikingsDeck();
         InitLastKingdomDeck();
+
         for(int i = 0; i < 10; i++)
         {   
             InstantiateCard(vikingsDeck.cards[i], "Vikings");
             vikingsDeck.RemoveCard(i);
         }
+
         for(int i = 0; i < 10; i++)
         {   
             InstantiateCard(lastKingdomDeck.cards[i], "Last Kingdom");
@@ -941,20 +961,20 @@ public class StartGame : MonoBehaviour
         //Image
         instantiateCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id);
         //Type
-        if (card.type == "Oro")
+        if (card.type == Card.Type.Golden)
         {
             instantiateCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/goldCard");
-        } else if (card.type == "Plata")
+        } else if (card.type == Card.Type.Silver)
         { 
             instantiateCard.transform.Find("Type").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/silverCard");
         } else {
             Destroy(instantiateCard.transform.Find("Type").GetComponent<Image>());
         }  
         //Power
-        if (card.type == "Oro")
+        if (card.type == Card.Type.Golden)
         {
             instantiateCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
-        } else if (card.type == "Plata")
+        } else if (card.type == Card.Type.Silver)
         { 
             instantiateCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = card.power.ToString();
             instantiateCard.transform.Find("Power").GetComponent<TextMeshProUGUI>().color = new Color(0, 0, 0);
@@ -1000,69 +1020,68 @@ public class StartGame : MonoBehaviour
         // Debug.Log(card.name);
     }
 
-    //!Arreglar
     //Inicializar el mazo Vikings
     void InitVikingsDeck()
     {   
-        // vikingsDeck.AddCard(new Card("Niebla", 0, "Neutral", "Clima", 0, "Clima", 3));
-        // vikingsDeck.AddCard(new Card("Tormenta Nórdica", 2, "Neutral", "Clima", 0, "Clima", 2));
-        // vikingsDeck.AddCard(new Card("Odin", 4, "Vikings", "Aumento", 0, "Aumento", 0));
-        // vikingsDeck.AddCard(new Card("Ivar the Boneless", 5, "Vikings", "Oro", 6, "range", 8));
-        // vikingsDeck.AddCard(new Card("Lagertha, la Guerrera Escudo", 6, "Vikings", "Oro", 7, "close_range", 6));
-        // vikingsDeck.AddCard(new Card("Rollo, el Berserker", 7, "Vikings", "Oro", 8, "close", 9));
-        // vikingsDeck.AddCard(new Card("Thor", 8, "Vikings", "Aumento", 0, "Aumento", 1));
-        // //vikingsDeck.AddCard(new Card("Ragnar Lothbrok", 9, "Vikings", "Lider", 0, "Lider", 5));
-        // vikingsDeck.AddCard(new Card("Ragnarok", 10, "Vikings", "Despeje", 0, "all", 4));
-        // vikingsDeck.AddCard(new Card("Bjorn Ironside", 11, "Vikings", "Oro", 6, "close", 7));
-        // vikingsDeck.AddCard(new Card("Floki, el Constructor", 12, "Vikings", "Plata", 4, "close", 10));
-        // vikingsDeck.AddCard(new Card("Floki, el Constructor", 13, "Vikings", "Plata", 4, "close", 10));
-        // vikingsDeck.AddCard(new Card("Valhalla", 14, "Vikings", "Plata", 3, "siege", 11));
-        // vikingsDeck.AddCard(new Card("Valhalla", 15, "Vikings", "Plata", 3, "siege", 11));
-        // vikingsDeck.AddCard(new Card("Valhalla", 16, "Vikings", "Plata", 3, "siege", 11));
-        // vikingsDeck.AddCard(new Card("Cuervo", 17, "Vikings", "Plata", 2, "range", 6));
-        // vikingsDeck.AddCard(new Card("Cuervo", 18, "Vikings", "Plata", 2, "range", 6));
-        // vikingsDeck.AddCard(new Card("Cuervo", 19, "Vikings", "Plata", 2, "range", 6));
-        // vikingsDeck.AddCard(new Card("Soldado Distractor", 20, "Vikings", "Señuelo", 0, "Señuelo", 14));
-        // vikingsDeck.AddCard(new Card("Ariete Nórdico", 21, "Vikings", "Plata", 1, "siege", 13));
-        // vikingsDeck.AddCard(new Card("Ariete Nórdico", 22, "Vikings", "Plata", 1, "siege", 13));
-        // vikingsDeck.AddCard(new Card("Ariete Nórdico", 23, "Vikings", "Plata", 1, "siege", 13));
-        // vikingsDeck.AddCard(new Card("Catapulta Vikinga", 24, "Vikings", "Plata", 4, "siege", 12));
-        // vikingsDeck.AddCard(new Card("Catapulta Vikinga", 25, "Vikings", "Plata", 4, "siege", 12));
-        // vikingsDeck.AddCard(new Card("Catapulta Vikinga", 26, "Vikings", "Plata", 4, "siege", 12));
-        // //Desordenar mazo
-        // vikingsDeck.Shuffle();
+        vikingsDeck.AddCard(new CardGame("Niebla", 0, "Neutral", Card.Type.Weather, 0, "Clima", 3));
+        vikingsDeck.AddCard(new CardGame("Tormenta Nórdica", 2, "Neutral", Card.Type.Weather, 0, "Clima", 2));
+        vikingsDeck.AddCard(new CardGame("Odin", 4, "Vikings", Card.Type.Boost, 0, "Aumento", 0));
+        vikingsDeck.AddCard(new CardGame("Ivar the Boneless", 5, "Vikings", Card.Type.Golden, 6, "range", 8));
+        vikingsDeck.AddCard(new CardGame("Lagertha, la Guerrera Escudo", 6, "Vikings", Card.Type.Golden, 7, "close_range", 6));
+        vikingsDeck.AddCard(new CardGame("Rollo, el Berserker", 7, "Vikings", Card.Type.Golden, 8, "close", 9));
+        vikingsDeck.AddCard(new CardGame("Thor", 8, "Vikings", Card.Type.Boost, 0, "Aumento", 1));
+        //vikingsDeck.AddCard(new Card("Ragnar Lothbrok", 9, "Vikings", "Lider", 0, "Lider", 5));
+        vikingsDeck.AddCard(new CardGame("Ragnarok", 10, "Vikings", Card.Type.Clear, 0, "all", 4));
+        vikingsDeck.AddCard(new CardGame("Bjorn Ironside", 11, "Vikings", Card.Type.Golden, 6, "close", 7));
+        vikingsDeck.AddCard(new CardGame("Floki, el Constructor", 12, "Vikings", Card.Type.Silver, 4, "close", 10));
+        vikingsDeck.AddCard(new CardGame("Floki, el Constructor", 13, "Vikings", Card.Type.Silver, 4, "close", 10));
+        vikingsDeck.AddCard(new CardGame("Valhalla", 14, "Vikings", Card.Type.Silver, 3, "siege", 11));
+        vikingsDeck.AddCard(new CardGame("Valhalla", 15, "Vikings", Card.Type.Silver, 3, "siege", 11));
+        vikingsDeck.AddCard(new CardGame("Valhalla", 16, "Vikings", Card.Type.Silver, 3, "siege", 11));
+        vikingsDeck.AddCard(new CardGame("Cuervo", 17, "Vikings", Card.Type.Silver, 2, "range", 6));
+        vikingsDeck.AddCard(new CardGame("Cuervo", 18, "Vikings", Card.Type.Silver, 2, "range", 6));
+        vikingsDeck.AddCard(new CardGame("Cuervo", 19, "Vikings", Card.Type.Silver, 2, "range", 6));
+        vikingsDeck.AddCard(new CardGame("Soldado Distractor", 20, "Vikings", Card.Type.Decoy, 0, "Señuelo", 14));
+        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 21, "Vikings", Card.Type.Silver, 1, "siege", 13));
+        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 22, "Vikings", Card.Type.Silver, 1, "siege", 13));
+        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 23, "Vikings", Card.Type.Silver, 1, "siege", 13));
+        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 24, "Vikings", Card.Type.Silver, 4, "siege", 12));
+        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 25, "Vikings", Card.Type.Silver, 4, "siege", 12));
+        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 26, "Vikings", Card.Type.Silver, 4, "siege", 12));
+        //Desordenar mazo
+        vikingsDeck.Shuffle();
     }
 
     //Inicializar el mazo Last Kingdom
     void InitLastKingdomDeck()
     {
-        // lastKingdomDeck.AddCard(new Card("Niebla", 1, "Neutral", "Clima", 0, "Clima", 3));
-        // lastKingdomDeck.AddCard(new Card("Tormenta Nórdica", 3, "Neutral", "Clima", 0, "Clima", 2));
-        // //lastKingdomDeck.AddCard(new Card("Uhtred de Bebbanburg", 27, "Last Kingdom", "Lider", 0, "Lider", 8));
-        // lastKingdomDeck.AddCard(new Card("Alfred el Grande", 28, "Last Kingdom", "Oro", 8, "close_range", 9));
-        // lastKingdomDeck.AddCard(new Card("Aethelflaed", 29, "Last Kingdom", "Oro", 7, "close_range", 5));
-        // lastKingdomDeck.AddCard(new Card("Beocca", 30, "Last Kingdom", "Aumento", 0, "Aumento", 0));
-        // lastKingdomDeck.AddCard(new Card("Dios Cristiano", 31, "Last Kingdom", "Aumento", 0, "Aumento", 1));
-        // lastKingdomDeck.AddCard(new Card("Iglesia Cristiana de Wessex", 32, "Last Kingdom", "Despeje", 0, "all", 4));
-        // lastKingdomDeck.AddCard(new Card("Leofric", 33, "Last Kingdom", "Oro", 6, "close", 6));
-        // lastKingdomDeck.AddCard(new Card("Finan", 34, "Last Kingdom", "Oro", 6, "close", 7));
-        // lastKingdomDeck.AddCard(new Card("Sihtric", 35, "Last Kingdom", "Plata", 4, "close", 10));
-        // lastKingdomDeck.AddCard(new Card("Sihtric", 36, "Last Kingdom", "Plata", 4, "close", 10));
-        // lastKingdomDeck.AddCard(new Card("Steapa", 37, "Last Kingdom", "Plata", 4, "close", 11));
-        // lastKingdomDeck.AddCard(new Card("Steapa", 38, "Last Kingdom", "Plata", 4, "close", 11));
-        // lastKingdomDeck.AddCard(new Card("Steapa", 39, "Last Kingdom", "Plata", 4, "close", 11));
-        // lastKingdomDeck.AddCard(new Card("Sigtryggr & Stiorra", 40, "Last Kingdom", "Plata", 2, "close_range", 6));
-        // lastKingdomDeck.AddCard(new Card("Sigtryggr & Stiorra", 41, "Last Kingdom", "Plata", 2, "close_range", 6));
-        // lastKingdomDeck.AddCard(new Card("Sigtryggr & Stiorra", 42, "Last Kingdom", "Plata", 2, "close_range", 6));
-        // lastKingdomDeck.AddCard(new Card("Ballesta Gigante", 43, "Last Kingdom", "Plata", 3, "siege", 12));
-        // lastKingdomDeck.AddCard(new Card("Ballesta Gigante", 44, "Last Kingdom", "Plata", 3, "siege", 12));
-        // lastKingdomDeck.AddCard(new Card("Ballesta Gigante", 45, "Last Kingdom", "Plata", 3, "siege", 12));
-        // lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 46, "Last Kingdom", "Plata", 1, "range", 13));
-        // lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 47, "Last Kingdom", "Plata", 1, "range", 13));
-        // lastKingdomDeck.AddCard(new Card("Aluvión de Flechas", 48, "Last Kingdom", "Plata", 1, "range", 13));
-        // lastKingdomDeck.AddCard(new Card("Halcón Mensajero", 49, "Last Kingdom", "Señuelo", 0, "Señuelo", 14));
-        // //Desordenar mazo
-        // lastKingdomDeck.Shuffle();
+        lastKingdomDeck.AddCard(new CardGame("Niebla", 1, "Neutral", Card.Type.Weather, 0, "Clima", 3));
+        lastKingdomDeck.AddCard(new CardGame("Tormenta Nórdica", 3, "Neutral", Card.Type.Weather, 0, "Clima", 2));
+        //lastKingdomDeck.AddCard(new Card("Uhtred de Bebbanburg", 27, "Last Kingdom", "Lider", 0, "Lider", 8));
+        lastKingdomDeck.AddCard(new CardGame("Alfred el Grande", 28, "Last Kingdom", Card.Type.Golden, 8, "close_range", 9));
+        lastKingdomDeck.AddCard(new CardGame("Aethelflaed", 29, "Last Kingdom", Card.Type.Golden, 7, "close_range", 5));
+        lastKingdomDeck.AddCard(new CardGame("Beocca", 30, "Last Kingdom", Card.Type.Boost, 0, "Aumento", 0));
+        lastKingdomDeck.AddCard(new CardGame("Dios Cristiano", 31, "Last Kingdom", Card.Type.Boost, 0, "Aumento", 1));
+        lastKingdomDeck.AddCard(new CardGame("Iglesia Cristiana de Wessex", 32, "Last Kingdom", Card.Type.Clear, 0, "all", 4));
+        lastKingdomDeck.AddCard(new CardGame("Leofric", 33, "Last Kingdom", Card.Type.Golden, 6, "close", 6));
+        lastKingdomDeck.AddCard(new CardGame("Finan", 34, "Last Kingdom", Card.Type.Golden, 6, "close", 7));
+        lastKingdomDeck.AddCard(new CardGame("Sihtric", 35, "Last Kingdom", Card.Type.Silver, 4, "close", 10));
+        lastKingdomDeck.AddCard(new CardGame("Sihtric", 36, "Last Kingdom", Card.Type.Silver, 4, "close", 10));
+        lastKingdomDeck.AddCard(new CardGame("Steapa", 37, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
+        lastKingdomDeck.AddCard(new CardGame("Steapa", 38, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
+        lastKingdomDeck.AddCard(new CardGame("Steapa", 39, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
+        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 40, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
+        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 41, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
+        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 42, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
+        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 43, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
+        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 44, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
+        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 45, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
+        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 46, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
+        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 47, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
+        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 48, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
+        lastKingdomDeck.AddCard(new CardGame("Halcón Mensajero", 49, "Last Kingdom", Card.Type.Decoy, 0, "Señuelo", 14));
+        //Desordenar mazo
+        lastKingdomDeck.Shuffle();
     }
 
 }

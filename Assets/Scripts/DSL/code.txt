@@ -1,0 +1,46 @@
+effect {
+    Name: "Damage",
+    Params: {
+        Amount: Number
+    },
+    Action: (targets, context) => {
+        for (target in targets) {
+            i = 0;
+            while (i++ < Amount)
+                target.Power -= 1;
+        }
+    }
+}
+
+effect {
+    Name: "Draw",
+    Action: (targets, context) => {
+        topCard = context.Deck.Pop();
+        context.Hand.Push(topCard);
+        context.Hand.Shuffle();
+    }
+}
+
+card {
+    Type: "Oro",
+    Name: "Beluga",
+    Faction: "Northern Realms",
+    Power: 10,
+    Range: ["Melee", "Ranged"],
+    OnActivation: [
+        {
+            Effect: {
+                Name: "Damage", // este efecto tiene que estar previamente definido.
+                Amount: 5, // ... y tener estos parámetros.
+            },
+            Selector: {
+                Source: "board", // o "hand", "otherHand", "deck", "otherDeck", "field", "otherField", "parent".
+                Single: false, // aunque por defecto es false.
+                Predicate: (unit) => unit.Faction == "Northern" @@ "Realms"
+            },
+        },
+        {
+            Effect: "Draw", // si se pone un string directo es equivalente a { Name: "Draw" }
+        }
+    ]
+}

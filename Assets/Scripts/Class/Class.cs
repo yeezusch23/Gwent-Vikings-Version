@@ -19,7 +19,7 @@ public abstract class Card
     public string row { get; set; }
     public int effect { get; set; }
 
-        public List<Position> positions;
+    public List<Position> positions;
 
     public enum Position
     {
@@ -47,7 +47,15 @@ public abstract class Card
         Boost,
         Decoy,
         Clear,
+        Null
     }
+}
+
+public class CardGame : Card
+{
+    public CardGame(string name, int id, string faction, Type? type, int power, string row, int effect):
+        base(name, id, faction, type, power, row, effect){}
+
 }
 
 [Serializable]
@@ -55,7 +63,7 @@ public abstract class FieldCard : Card
 {
     public FieldCard(string name, int id, string faction, Type type, int power, string row, int effect, int power2):
         base(name, id, faction, type, power, row, effect){
-            for (int i = 0; i<4; i++) powers[i] = power;
+            for (int i = 0; i<4; i++) powers[i] = power2;
         }
     /*
     It is necessary to save the values of different power layers 
@@ -79,9 +87,9 @@ public class Deck
     }
 
     public void Shuffle()
-    {
+    {   
         // Método para barajar las cartas en el mazo
-        Random rng = new Random();
+        System.Random rng = new System.Random();
         int n = cards.Count;
         while (n > 1)
         {

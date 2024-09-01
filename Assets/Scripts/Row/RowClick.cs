@@ -19,12 +19,19 @@ public class RowClick : MonoBehaviour
     //Metodo para colocar las cartas en las filas
     public void OnRowClick()
     {   
+        Debug.Log(controller.selectedCard);
         if (controller.selectedCard != null)
         {     
+
             CardStats card = controller.selectedCard.transform.Find("Stats").GetComponent<CardStats>();
-            if(card.row == "close" || card.row == "close" || card.row == "range" || card.row == "siege" || card.row == "all" || card.row == "close_range"){
-                if((transform.parent.parent.name == "Player1" && card.faction == "Vikings") || (transform.parent.parent.name == "Player2" && card.faction == "Last Kingdom"))
+            if(card.row == "close" || card.row == "range" || card.row == "siege" || card.row == "all" || card.row == "close_range"
+            || card.row == "close_siege" || card.row == "range_siege" ){
+                
+       
+                if((transform.parent.parent.name == "Player1") || (transform.parent.parent.name == "Player2"))
                 {   
+                    
+                    // Debug.Log("Entra");
                     bool ok = false;
                     if (transform.parent.name == card.row)
                     {   
@@ -34,6 +41,20 @@ public class RowClick : MonoBehaviour
                         controller.selectedCard = null;
                         ok = true;
                     } else if (card.row == "close_range" && (transform.parent.name == "close" || transform.parent.name == "range"))
+                    {   
+                        controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
+                        controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;
+                        controller.selectedCard.transform.SetParent(transform, false);
+                        controller.selectedCard = null; 
+                        ok = true;
+                    } else if (card.row == "close_siege" && (transform.parent.name == "close" || transform.parent.name == "siege"))
+                    {   
+                        controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
+                        controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;
+                        controller.selectedCard.transform.SetParent(transform, false);
+                        controller.selectedCard = null; 
+                        ok = true;
+                    } else if (card.row == "range_siege" && (transform.parent.name == "siege" || transform.parent.name == "range"))
                     {   
                         controller.selectedCard.transform.GetComponent<CardHover>().cardActive = false;
                         controller.selectedCard.transform.GetComponent<CardSelect>().isSelectable = false;

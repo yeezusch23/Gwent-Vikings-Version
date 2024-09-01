@@ -23,7 +23,7 @@ public abstract class Block : IStatement
     public abstract void Execute(Context context, List<Card> targets);
 }
 
-// Abstract class for list methods
+// Clase abstracta para métodos de lista
 public abstract class Method : IStatement
 {
     public Method(IExpression list, Token accessToken)
@@ -37,7 +37,7 @@ public abstract class Method : IStatement
     public abstract void Execute(Context context, List<Card> targets);
 }
 
-// Pop operation on lists
+// Operación pop en listas
 public class Pop : Method, ICardAtom
 {
     public Pop(IExpression list, Token accessToken) : base(list, accessToken) {}
@@ -62,7 +62,7 @@ public class Pop : Method, ICardAtom
 
 
 
-// Increment and decrement operations
+// Operaciones de incremento y decremento
 public class Increment_Decrement : Assignation, IExpression
 {
     public Increment_Decrement(IExpression operand, Token operation) : base(operand, null, operation){}
@@ -84,7 +84,7 @@ public class Increment_Decrement : Assignation, IExpression
     }
 }
 
-// Assignment statement
+// Declaración de asignación
 public class Assignation : IStatement
 {
     public Assignation(IExpression operand, IExpression assignation, Token operation)
@@ -113,7 +113,7 @@ public abstract class ArgumentMethod: Method{
     public IExpression card;
 }
 
-// Push method (adds card to list)
+// Método Push (agrega tarjeta a la lista)
 public class Push : ArgumentMethod
 {
     public Push(IExpression list, IExpression card, Token accessToken) : base(list,card,accessToken){}
@@ -125,7 +125,7 @@ public class Push : ArgumentMethod
     }
 }
 
-// SendBottom method (adds card to the bottom of the list)
+// Método SendBottom (agrega la tarjeta al final de la lista)
 public class SendBottom : ArgumentMethod
 {
     public SendBottom(IExpression list, IExpression card, Token accessToken) : base(list,card,accessToken){}
@@ -138,7 +138,7 @@ public class SendBottom : ArgumentMethod
     }
 }
 
-// Remove method (removes card from list)
+// Método Remove (elimina la tarjeta de la lista)
 public class Remove : ArgumentMethod
 {
     public Remove(IExpression list, IExpression card, Token accessToken) : base(list,card,accessToken){}
@@ -151,7 +151,7 @@ public class Remove : ArgumentMethod
     }
 }
 
-// Shuffle method (shuffles the list of cards)
+// Método Shuffle (baraja la lista de cartas)
 public class Shuffle : Method
 {
     public Shuffle(IExpression list, Token accessToken) : base(list,accessToken) {}
@@ -163,7 +163,7 @@ public class Shuffle : Method
     }
 }
 
-// While loop statement
+// Sentencia de bucle While
 public class While : Block
 {
     public While(List<IStatement> statements, IExpression predicate, Token keyword) : base(statements, keyword)
@@ -186,7 +186,7 @@ public class While : Block
     }
 }
 
-// Foreach loop statement
+// Sentencia de bucle foreach
 public class Foreach : Block
 {
     public Foreach(List<IStatement> statements, IExpression collection, Token variable, Token keyword) : base(statements, keyword)

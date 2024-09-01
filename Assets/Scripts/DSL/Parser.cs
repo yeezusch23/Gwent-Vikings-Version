@@ -33,7 +33,7 @@ public class Parser
         return program;
     }
 
-    //Parses a card
+    //Parser Card
     public CardNode ParseCard()
     {
         Token keyword=Stream.tokens[Stream.position-1];
@@ -121,23 +121,28 @@ public class Parser
         return card;
     }
 
+    //Parse EffectActivation
     public EffectActivation ParseEffectActivation()
     {
         Token check = Stream.Consume(TokenType.OpenBrace, "Expected '{'", Onactivation.synchroTypes);
         if (check == null) return null;
         EffectActivation activation = new EffectActivation();
         while (!Stream.Match(TokenType.ClosedBrace))
-        {
+        {   
+            
+
             if (Stream.Match(TokenType.Effect))
             {
                 if (activation.effect != null) Stream.Error(Stream.tokens[Stream.position-1], "Effect was already declared in this EffectActivation", EffectActivation.synchroTypes);
                 activation.effect = ParseActivationEffect();
+                if(Stream.tokens[Stream.position].type == TokenType.ValueSeparator) Stream.Next();
                 continue;
             }
             if (Stream.Match(TokenType.Selector))
             {
                 if (activation.selector != null) Stream.Error(Stream.tokens[Stream.position-1], "Selector was already declared in this EffectActivation", EffectActivation.synchroTypes);
                 activation.selector = ParseSelector();
+                if(Stream.tokens[Stream.position].type == TokenType.ValueSeparator) Stream.Next();
                 continue;
             }
             if (Stream.Match(TokenType.PostAction))
@@ -146,6 +151,7 @@ public class Parser
                 check = Stream.Consume(TokenType.AssignParams, "Expected ':' after PostAction declaration", EffectActivation.synchroTypes);
                 if (check == null) continue;
                 activation.postAction = ParseEffectActivation();
+                if(Stream.tokens[Stream.position].type == TokenType.ValueSeparator) Stream.Next();
                 continue;
             }
             Stream.Error(Stream.Peek(), "Expected EffectActivation field", EffectActivation.synchroTypes);
@@ -158,7 +164,7 @@ public class Parser
         return activation;
     }
 
-       //Parses an effect
+    //Parses un effect
     public Effect ParseActivationEffect()
     {
         Token keyword = Stream.tokens[Stream.position-1];
@@ -201,13 +207,13 @@ public class Parser
         }
         if (effect.definition == null)
         {
-            Stream.Error(keyword, "There are missing effect arguments in the ocnstruction", EffectActivation.synchroTypes);
+            Stream.Error(keyword, "There are missing effect arguments in the construction", EffectActivation.synchroTypes);
             return null;
         }
         return effect;
     }
 
-        //Parses the parameters for an effect
+        //Analiza los parámetros de un efecto
     public Parameters ParseParameter()
     {
         Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -235,7 +241,7 @@ public class Parser
         return new Parameters(parameters);
     }
     
-    //Parses the Source field of a selector
+    //Analiza el campo source de un selector
     public Token Source()
     {
         Token check = Stream.Consume(TokenType.AssignParams, "Expected ':' after Source declaration", Selector.synchroTypes);
@@ -250,7 +256,7 @@ public class Parser
         return source;
     }
 
-    //Parses the Single field of a selector
+    //Analiza el campo single de un selector
     public bool? Single()
     {
         Token check = Stream.Consume(TokenType.AssignParams, "Expected ':' after Single declaration", Selector.synchroTypes);
@@ -264,7 +270,7 @@ public class Parser
         return (bool)boolean.literal;
     }
 
-    //Parses the Predicate field of a selector
+    //Analiza el campo Predicate de un selector
     public (IExpression, Token) ParsePredicate()
     {
         Token check = Stream.Consume(TokenType.AssignParams, "Expected ':' after Predicate definition", Selector.synchroTypes);
@@ -284,7 +290,6 @@ public class Parser
         IExpression predicate = ParseExpression();
         return (predicate, argument);
     }
-
     public Selector ParseSelector()
     {
         Token keyword = Stream.tokens[Stream.position-1];
@@ -341,7 +346,7 @@ public class Parser
 
     
 
-    // Parses the onactivation field of a card
+    // Analiza el campo de Onactivation de una card
     public Onactivation ParseOnactivation()
     {
         List<EffectActivation> activations = new List<EffectActivation>();
@@ -360,6 +365,7 @@ public class Parser
         return new Onactivation(activations);
     }
 
+    // Analiza el campo de range de una card
      public List<string> ParseRange()
     {
 
@@ -474,7 +480,7 @@ public class Parser
         return expr;
     }
 
-    //Parses comparison expressions
+    //Analiza expresiones de comparación
     public IExpression Comparison()
     {
         IExpression expr = Term();
@@ -497,7 +503,7 @@ public class Parser
         return expr;
     }
 
-    //Parses term expressions (addition and substraction)
+    //Analiza expresiones de términos (suma y resta)
     public IExpression Term()
     {
         IExpression expr = Factor();
@@ -512,7 +518,7 @@ public class Parser
         return expr;
     }
 
-    //Parses factor expressions (product and division)
+    //Analiza expresiones factoriales (producto y división)
     public IExpression Factor()
     {
         IExpression expr = Power();
@@ -527,7 +533,7 @@ public class Parser
         return expr;
     }
 
-    //Parses power expressions (exponentiation)
+    //Analiza expresiones de potencia (exponenciación)
     public IExpression Power()
     {
         IExpression expr = Unary();
@@ -540,7 +546,7 @@ public class Parser
         return expr;
     }
 
-    //Parses unary expressions (negation and logical NOT)
+    //Analiza expresiones unarias (negación y NO lógico)
     public IExpression Unary()
     {
         List<TokenType> types = new List<TokenType>() { TokenType.Sub, TokenType.Exclamation };
@@ -554,7 +560,7 @@ public class Parser
         return Primary();
     }
 
-    //Parses primary expressions (literals, identifiers, and grouped expressions)
+    //Analiza expresiones primarias (literales, identificadores y expresiones agrupadas)
     public IExpression Primary()
     {
         if (Stream.Match(TokenType.False)) return new Literal(false);
@@ -584,11 +590,11 @@ public class Parser
     }
 
     
-    //Parses access expressions (property and pop method access)
+    //Analiza expresiones de acceso (acceso a propiedades y métodos pop)
     public IExpression Access(IExpression left)
     {
         Token check;
-        //Store dot token in order to report posible semantic errors later in the Access
+        //Almacena el token de punto para informar posibles errores semánticos más adelante en Access
 
         while (Stream.Match(TokenType.Dot))
         {
@@ -605,7 +611,7 @@ public class Parser
                     TokenType.HandOfPlayer, TokenType.DeckOfPlayer,
                     TokenType.GraveyardOfPlayer, TokenType.FieldOfPlayer,
                 };
-                //store list token
+
                 Token aux = Stream.tokens[Stream.position-1];
                 if (Stream.Check(types))
                 {
@@ -613,7 +619,6 @@ public class Parser
                     Token player = Stream.Consume(TokenType.OpenParen, "Expected Player Argument", Atom.moduletypes);
                     if (player == null) return null;
 
-                    //store player argument
                     IExpression arg = ParseExpression();
                     check = Stream.Consume(TokenType.ClosedParen, "Expected ')' after Player Argument", Atom.moduletypes);
                     if (check == null) return null;
@@ -628,7 +633,6 @@ public class Parser
                 }
                 else
                 {
-                    //Syntax sugar for player lists
                     switch (aux.type)
                     {
                         case TokenType.Hand: left = Indexer(new HandList(left, new TriggerPlayer(), dot, aux)); break;
@@ -642,7 +646,6 @@ public class Parser
 
             else if (Stream.Match(TokenType.Find))
             {
-                //Consume all expected tokens in a Find method
                 Token argument = Stream.Consume(TokenType.OpenParen, "Expected '(' after method", Atom.moduletypes);
                 if (argument == null) return null;
 
@@ -658,7 +661,6 @@ public class Parser
                 check = Stream.Consume(TokenType.Arrow, "Expected predicate function call", Atom.moduletypes);
                 if (check == null) return null;
 
-                //store predicate 
                 IExpression predicate = ParseExpression();
                 check = Stream.Consume(TokenType.ClosedParen, "Expected ')' after predicate", Atom.moduletypes);
                 if (check == null) return null;
@@ -676,7 +678,7 @@ public class Parser
                 left = new Pop(left, dot);
             }
             else if (Stream.Match(TokenType.TriggerPlayer)) left = Indexer(new TriggerPlayer());
-            //Card property access
+           //Acceso a la propiedad de la card
             else if (Stream.Match(TokenType.Name)) left = Indexer(new NameAccess(left, dot));
             else if (Stream.Match(TokenType.Power)) left = Indexer(new PowerAccess(left, dot));
             else if (Stream.Match(TokenType.Faction)) left = Indexer(new FactionAccess(left, dot));
@@ -703,7 +705,7 @@ public class Parser
     }
 
 
-    //Parses indexer expressions (list indexing)
+    //Analiza expresiones del indexador (indexación de lista)
     public IExpression Indexer(IExpression list)
     {
         if (Stream.Match(TokenType.OpenBracket))
@@ -819,7 +821,7 @@ public class Parser
                 return null;
             }
         }
-        //Parses while loop
+        //Analiza el bucle while
         if (Stream.Match(TokenType.While))
         {
             check = Stream.Consume(TokenType.OpenParen, "Expect '(' after 'while'", Block.moduleTypes);
@@ -830,11 +832,11 @@ public class Parser
             {
                 body = ParseBlock(Block.moduleTypes);
             }
-            //One-liner handling
+
             else body = new List<IStatement>() { ParseStatement() };
             return new While(body, predicate, statementHead);
         }
-        //Parses for loop
+        //Analiza el bucle for
         if (Stream.Match(TokenType.For))
         {
             check = Stream.Consume(TokenType.OpenParen, "Expected '('", Block.moduleTypes);
@@ -851,7 +853,6 @@ public class Parser
             {
                 body = ParseBlock(Block.moduleTypes);
             }
-            //One-liner handling
             else body = new List<IStatement>() { ParseStatement() };
             return new Foreach(body, collection, variable, statementHead);
         }
@@ -871,7 +872,7 @@ public class Parser
         return statements;
     }
 
-    //Parses an Action of an Effect Definition
+    //Analiza una acción de una definición de efecto
     public Action ParseAction()
     {
         Token action= Stream.tokens[Stream.position-1];
@@ -929,6 +930,7 @@ public class Parser
                     continue;
                 }
                 definition.parameterdefs = ParametersDefinition();
+                if(Stream.tokens[Stream.position].type == TokenType.ValueSeparator) Stream.Next();
                 continue;
             }
             if (Stream.Match(TokenType.Action))

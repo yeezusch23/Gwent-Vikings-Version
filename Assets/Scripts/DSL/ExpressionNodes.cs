@@ -25,7 +25,7 @@ public abstract class BinaryOperator : IExpression
     public abstract object Evaluate(Context context, List<Card> targets);
 }
 
-// Inequality operator
+// Operador de desigualdad
 public class Differ : BinaryOperator
 {
     public Differ(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -36,6 +36,7 @@ public class Differ : BinaryOperator
     }
 }
 
+// Operador de igualdaad
 public class Equal : BinaryOperator
 {
     public Equal(IExpression left, IExpression right, Token token) : base(left, right, token) {}
@@ -179,11 +180,11 @@ public class IndexedCard : ICardAtom
     }
 }
 
-// Abstract class for lists specific to a player
+// Clase abstracta para listas específicas de un jugador
 public abstract class IndividualList : List
 {
-    //This field isn't used in the evaluation method, it is only for the semnatic check
-    //This is why in cases where a semantic check isn't needed it will have null value
+    //Este campo no se utiliza en el método de evaluación, es solo para la comprobación semántica.
+    //Es por eso que en los casos en los que no se necesita una comprobación semántica, tendrá un valor nulo.
     public IExpression context;
     public Token playertoken;
     public IExpression player;
@@ -194,7 +195,7 @@ public abstract class IndividualList : List
         this.playertoken = playertoken;
     }
 }
-// Abstract class for lists of cards
+// Clase abstracta para listas de cards
 public abstract class List : Atom {
     public List(Token accesToken){
         this.accessToken = accesToken;
@@ -203,7 +204,7 @@ public abstract class List : Atom {
     public GameComponent gameComponent;
 }
 
-// List of cards in a player's deck
+// Lista de cartas en el mazo de un jugador
 public class DeckList : IndividualList
 {
     public DeckList(IExpression context,IExpression player, Token accessToken, Token playertoken) : base(context, player, accessToken, playertoken) { }
@@ -216,7 +217,7 @@ public class DeckList : IndividualList
     }
 }
 
-// List of cards in a player's graveyard
+// Lista de cartas en el cementerio de un jugador
 public class GraveyardList : IndividualList
 {
     public GraveyardList(IExpression context,IExpression player, Token accessToken, Token playertoken) : base(context, player, accessToken, playertoken) { }
@@ -229,7 +230,7 @@ public class GraveyardList : IndividualList
     }
 }
 
-// List of cards in a player's field
+// Lista de cartas en el campo de un jugador
 public class FieldList : IndividualList
 {
     public FieldList(IExpression context,IExpression player, Token accessToken, Token playertoken) : base(context, player, accessToken, playertoken) { }
@@ -242,7 +243,7 @@ public class FieldList : IndividualList
     }
 }
 
-// List of cards in a player's hand
+// Lista de cartas en la mano de un jugador
 public class HandList : IndividualList
 {
     public HandList(IExpression context, IExpression player, Token accessToken, Token playertoken) : base(context, player, accessToken, playertoken) { }
@@ -263,7 +264,7 @@ public class TriggerPlayer : Atom
     }
 }
 
-// List of cards on the board
+// Lista de cartas en el tablero
 public class BoardList : List
 {
     public BoardList(IExpression context, Token accessToken) : base(accessToken){
@@ -276,7 +277,7 @@ public class BoardList : List
     }
 }
 
-// List of cards filtered by a predicate
+// Lista de tarjetas filtradas por un predicado
 public class ListFind : List
 {
     public ListFind() : base(null){ }
@@ -296,7 +297,7 @@ public class ListFind : List
 
     public override object Evaluate(Context context, List<Card> targets)
     {
-        // Save the variable value if it exists in the context
+       //Guardar el valor de la variable si existe en el contexto
         object card = 0;
         List<Card> result = new List<Card>();
         bool usedvariable = false;
@@ -306,14 +307,14 @@ public class ListFind : List
             usedvariable = true;
         }
 
-        // Evaluate the predicate for each card in the list
+        // Evalúa el predicado de cada carta de la lista
         foreach (Card listcard in (List<Card>)list.Evaluate(context, targets))
         {
             context.Set(parameter, listcard);
             if ((bool)predicate.Evaluate(context, targets)) result.Add(listcard);
         }
 
-        // Restore the original variable value if it was used
+        // Restaurar el valor de la variable original si se utilizó
         if (usedvariable) context.Set(parameter, card);
         else context.variables.Remove(parameter.lexeme);
 
@@ -321,7 +322,7 @@ public class ListFind : List
     }
 }
 
-// Access card name property
+// Propiedad del nombre de la card de acceso
 public class NameAccess : PropertyAccess
 {
     public NameAccess(IExpression card, Token accessToken) : base(card, accessToken) { }
@@ -338,7 +339,7 @@ public class NameAccess : PropertyAccess
     }
 }
 
-// Access card power property
+// Propiedad power de la card de acceso
 public class PowerAccess : PropertyAccess
 {
     public PowerAccess(IExpression card, Token accessToken) : base(card, accessToken) { }
@@ -359,7 +360,6 @@ public class PowerAccess : PropertyAccess
     }
 }
 
-// Access card faction property
 public class FactionAccess : PropertyAccess
 {
     public FactionAccess(IExpression card, Token accessToken) : base(card, accessToken) { }
@@ -376,7 +376,6 @@ public class FactionAccess : PropertyAccess
     }
 }
 
-// Access card type property
 public class TypeAccess : PropertyAccess
 {
     public TypeAccess(IExpression card, Token accessToken) : base(card, accessToken) { }
@@ -393,7 +392,6 @@ public class TypeAccess : PropertyAccess
     }
 }
 
-// Access card owner property
 public class OwnerAccess : PropertyAccess
 {
     public OwnerAccess(IExpression card, Token accessToken) : base(card, accessToken) { }
@@ -407,7 +405,7 @@ public class OwnerAccess : PropertyAccess
     public override void Set(Context context, List<Card> targets, object value){}
 }
 
-// Abstract class for unary operators in expressions
+// Clase abstracta para operadores unarios en expresiones
 public abstract class Unary : Atom
 {
     public Token operation;
@@ -419,7 +417,7 @@ public abstract class Unary : Atom
     }
 }
 
-// Logical negation operator
+// Operador de negación lógica
 public class Negation : Unary
 {
     public Negation(IExpression right, Token operation) : base(right, operation) { }
@@ -430,7 +428,7 @@ public class Negation : Unary
     }
 }
 
-// Arithmetic negation operator
+// Operador de negación aritmética
 public class Negative : Unary
 {
     public Negative(IExpression right, Token operation) : base(right, operation) { }
@@ -441,7 +439,7 @@ public class Negative : Unary
     }
 }
 
-// Power operator (exponentiation)
+// Operador de potencia (exponenciación)
 public class Power : BinaryOperator
 {
     public Power(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -451,7 +449,7 @@ public class Power : BinaryOperator
         return OptimizedPower((int)left.Evaluate(context, targets), (int)right.Evaluate(context, targets));
     }
 
-    // Helper method to calculate power efficiently
+    // Método auxiliar para calcular la potencia de manera eficiente
     static int OptimizedPower(int argument, int power)
     {
         int result = 1;
@@ -463,7 +461,7 @@ public class Power : BinaryOperator
     }
 }
 
-// Product operator
+// Operador de producto
 public class Product : BinaryOperator
 {
     public Product(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -474,7 +472,7 @@ public class Product : BinaryOperator
     }
 }
 
-// Division operator
+// Operador de división
 public class Division : BinaryOperator
 {
     public Division(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -485,7 +483,7 @@ public class Division : BinaryOperator
     }
 }
 
-// Addition operator
+// Operador de adición
 public class Add : BinaryOperator
 {
     public Add(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -496,7 +494,7 @@ public class Add : BinaryOperator
     }
 }
 
-// Subtraction operator
+// Operador de resta
 public class Sub : BinaryOperator
 {
     public Sub(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -507,7 +505,7 @@ public class Sub : BinaryOperator
     }
 }
 
-// Greater than operator
+// Mayor que el operador
 public class Greater : BinaryOperator
 {
     public Greater(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -518,7 +516,7 @@ public class Greater : BinaryOperator
     }
 }
 
-// Less than or equal operator
+// Operador menor o igual
 public class GreaterEqual : BinaryOperator
 {
     public GreaterEqual(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -529,7 +527,7 @@ public class GreaterEqual : BinaryOperator
     }
 }
 
-// Less than operator
+// Menos que operador
 public class Less : BinaryOperator
 {
     public Less(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -540,7 +538,7 @@ public class Less : BinaryOperator
     }
 }
 
-// Greater than or equal operator
+// Operador menor o igual
 public class LessEqual : BinaryOperator
 {
     public LessEqual(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -551,7 +549,7 @@ public class LessEqual : BinaryOperator
     }
 }
 
-// String concatenation operator
+// Operador de concatenación de cadenas
 public class Join : BinaryOperator
 {
     public Join(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -562,7 +560,7 @@ public class Join : BinaryOperator
     }
 }
 
-// String concatenation with space operator
+// Concatenación de cadenas con operador de espacio
 public class SpaceJoin : BinaryOperator
 {
     public SpaceJoin(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -573,7 +571,7 @@ public class SpaceJoin : BinaryOperator
     }
 }
 
-// Logical OR operator
+// Operador lógico OR
 public class Or : BinaryOperator
 {
     public Or(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -584,7 +582,7 @@ public class Or : BinaryOperator
     }
 }
 
-// Logical AND operator
+// Operador lógico AND
 public class And : BinaryOperator
 {
     public And(IExpression left, IExpression right, Token token) : base(left, right, token) { }
@@ -595,7 +593,7 @@ public class And : BinaryOperator
     }
 }
 
-// Numeric modification operations (e.g., +=, -=, etc.)
+// Operaciones de modificación numérica (por ejemplo, +=, -=, etc.)
 public class NumericModification : Assignation
 {
     public NumericModification(IExpression operand, IExpression assignation, Token operation) : base(operand, assignation ,operation){}
@@ -616,7 +614,7 @@ public class NumericModification : Assignation
     }
 }
 
-// Represents a card in the AST
+// Representa una tarjeta en el AST
 public class CardNode : IASTNode
 {
     public static readonly List<TokenType> synchroTypes = new List<TokenType>() {
@@ -653,7 +651,7 @@ public class Onactivation : IASTNode
     }
 }
 
-// Represents an effect activation in the AST
+// Representa una activación de efecto en el AST
 [Serializable]
 public class EffectActivation : IASTNode
 {
@@ -693,7 +691,7 @@ public class EffectActivation : IASTNode
     }
 }
 
-// Used ListFind object with predicate based selection Evaluate method
+// Se utilizó el objeto ListFind con el método Evaluate de selección basado en predicados
 public class Selector : IASTNode
 {
     public static readonly List<TokenType> synchroTypes = new List<TokenType> {TokenType.Source, TokenType.Single, TokenType.Predicate, TokenType.ClosedBrace, TokenType.OpenBracket};
