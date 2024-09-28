@@ -44,7 +44,11 @@ public class CardHover : MonoBehaviour
         effectList.setEffect("Multiplica por n su ataque, siendo n la cantidad de cartas iguales a ella en el campo");
         effectList.setEffect("Permite colocar una carta con poder 0 en el lugar de una carta del campo para regresar esta a la mano");
         
-        effectList.setEffect("Carta creada, sin efecto");
+        effectList.setEffect("Damage");
+        effectList.setEffect("Boost");
+        effectList.setEffect("Draw");
+        effectList.setEffect("DrawAndBoost");
+
     }
     
     //Desplazar carta cuando esta en hover
@@ -95,7 +99,10 @@ public class CardHover : MonoBehaviour
         controller.showCard.SetActive(true);
         CardStats card = transform.Find("Stats").GetComponent<CardStats>();
         //Image
-        controller.showCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id.ToString());
+        if(card.id >= 50)
+            controller.showCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + 100);
+        else
+            controller.showCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id.ToString());
         controller.showCard.transform.Find("Image").GetComponent<Image>().color = new Color(255, 255, 255, 255);
         //Type
         if (card.type == Card.Type.Golden)
@@ -145,6 +152,8 @@ public class CardHover : MonoBehaviour
             controller.showCard.transform.Find("Row").GetComponent<Image>().color = new Color(0, 0, 0, 0);
         }
         //Effect
+        // Debug.Log(card.effect);
+        // Debug.Log(effectList.effects.Count);
         controller.showCard.transform.Find("Effect").GetComponent<TextMeshProUGUI>().text = effectList.effects[card.effect];
         //Name
         controller.showCard.transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.name;

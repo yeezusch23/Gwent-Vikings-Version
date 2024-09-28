@@ -2,13 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using System.Collections.Generic;
+using System;
+using UnityEngine.XR;
 
 public enum GameState { PLAYER1, PLAYER2, PLAYER1PASS, PLAYER2PASS }
 
 public class StartGame : MonoBehaviour
 {   
-    public Player Player1;
-    public Player Player2;
+    public Player Player1 = new Player();
+    public Player Player2 = new Player();
 
     public GameComponent board;
     public GameObject cardPrefab;
@@ -71,6 +74,16 @@ public class StartGame : MonoBehaviour
     
     public int roundCount = 0;
     public int changedCard = 0;
+
+    public static List<Card> deck1;
+    public static List<Card> deck2;
+
+    // Logic
+    public Hand vikingsHand = new Hand();
+    public Hand lastKingdomHand = new Hand();
+
+    public Board boardCards = new Board();
+
     void Start () 
     {   
         // if(DataManager.myStringList.Count == 0)
@@ -153,7 +166,7 @@ public class StartGame : MonoBehaviour
         if(cardDeckName == "Vikings")
         {   
             InstantiateCard(vikingsDeck.cards[0], "Vikings");
-            vikingsDeck.RemoveCard(0);
+            vikingsDeck.Remove(vikingsDeck.cards[0]);
             if(handVikings.transform.childCount > 10)
             {   
                 Transform card = handVikings.transform.GetChild(handVikings.transform.childCount-1); 
@@ -166,7 +179,7 @@ public class StartGame : MonoBehaviour
         } else
         {
             InstantiateCard(lastKingdomDeck.cards[0], "Last Kingdom");
-            lastKingdomDeck.RemoveCard(0);  
+            lastKingdomDeck.Remove(lastKingdomDeck.cards[0]);  
             if(handLastKingdom.transform.childCount > 10)
             {   
                 Transform card = handLastKingdom.transform.GetChild(handLastKingdom.transform.childCount-1); 
@@ -312,10 +325,15 @@ public class StartGame : MonoBehaviour
     }
     
     //Activar efectos
-    public void ActiveEffect(Transform row)
+    public void ActiveEffect(Transform row, CardStats card)
     {   
         //Enconrar numero del efecto de la carta
-        int n = row.transform.GetChild(row.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
+        // int n = row.transform.GetChild(row.transform.childCount-1).Find("Stats").GetComponent<CardStats>().effect; 
+        int n = card.effect;
+        if(n == 100)
+        {
+
+        }
         if(n == 0)
             AddPowerRow(row, 2);
         if(n == 1)
@@ -326,7 +344,7 @@ public class StartGame : MonoBehaviour
             ReducePowerRow("range", -1);
         if(n == 4)
             DeletClimas(row, 1);
-        if(n == 6 || n == 5)
+        if(n == 6 || n == 5 || n == 17 || n == 18)
             GetCardOfDeck(row);
         if(n == 7 || n == 8)
             DeletCard(row, 1);
@@ -340,7 +358,13 @@ public class StartGame : MonoBehaviour
             DeletMinRow(row);
         if(n == 13)
             MultiplyByN(row);
-        
+
+        if(n == 15) Damage(row, DataManager.myAmountList["Damage"]);
+        if(n == 16)
+            Boost(row, DataManager.myAmountList["Boost"]);        
+        if(n == 18)
+            Boost(row, DataManager.myAmountList["DrawAndBoost"]);
+
         CheckAddPowerRight(row);
     }
 
@@ -446,11 +470,79 @@ public class StartGame : MonoBehaviour
     }
 
     
-    /*
-    Efecto (#11)
-    *Caclula el promedio de poder entre todas las cartas del campo del rival ([parte entera]). 
-    *Luego iguala el poder de todas las cartas a ese promedio*/
-    void AverageCards(Transform row)
+    public void Damage(Transform row, int amount)
+    {   
+        GameObject playerField;
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {
+            playerField = player2;
+        } else
+        {
+            playerField = player1;
+        }
+
+        //close
+        for(int i = 0; i < playerField.transform.Find("close").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power -= amount;
+            playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        //range
+        for(int i = 0; i < playerField.transform.Find("range").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power -= amount;
+            playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        //siege
+        for(int i = 0; i < playerField.transform.Find("siege").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power -= amount;
+            playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+
+        }
+
+            // Transform child = playerField.transform.Find("close").transform.Find("row").GetChild(i);
+            // child.transform.Find("Stats").GetComponent<CardStats>().power = val;
+            // child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
+       
+    }
+
+    
+    public void Boost(Transform row, int amount)
+    {   
+        GameObject playerField;
+        if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
+        {
+            playerField = player1;
+        } else
+        {
+            playerField = player2;
+        }
+
+        //close
+        for(int i = 0; i < playerField.transform.Find("close").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power += amount;
+            playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("close").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        //range
+        for(int i = 0; i < playerField.transform.Find("range").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power += amount;
+            playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("range").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+        }
+        //siege
+        for(int i = 0; i < playerField.transform.Find("siege").transform.Find("row").childCount; i++)
+        {   
+            playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power += amount;
+            playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Power").GetComponent<TextMeshProUGUI>().text = playerField.transform.Find("siege").transform.Find("row").GetChild(i).transform.Find("Stats").GetComponent<CardStats>().power.ToString();
+
+        }
+
+       
+    }
+
+        void AverageCards(Transform row)
     {   
         int sum = 0, cnt = 0, val = 0;
         GameObject playerField;
@@ -511,6 +603,7 @@ public class StartGame : MonoBehaviour
             child.transform.Find("Power").GetComponent<TextMeshProUGUI>().text = val.ToString();
         }
     }
+
 
     
     /*
@@ -633,11 +726,11 @@ public class StartGame : MonoBehaviour
         if(gameState == GameState.PLAYER1 || gameState == GameState.PLAYER2PASS)
         {
             InstantiateCard(vikingsDeck.cards[0], "Vikings");
-            vikingsDeck.RemoveCard(0);    
+            vikingsDeck.Remove(vikingsDeck.cards[0]);    
         } else 
         {
             InstantiateCard(lastKingdomDeck.cards[0], "Last Kingdom");
-            lastKingdomDeck.RemoveCard(0);
+            lastKingdomDeck.Remove(lastKingdomDeck.cards[0]);
         }
     }
 
@@ -680,7 +773,7 @@ public class StartGame : MonoBehaviour
     *Reduce en 1 la potencia de los (ataques a distancia) de todas las unidades en el campo de batalla*/
     void ReducePowerRow(string rowType, int add)
     {   
-        Debug.Log(rowType);
+        // Debug.Log(rowType);
         int childs = player1.transform.Find(rowType).transform.Find("row").childCount;
         for(int i = 0; i < childs; i++)
         {   
@@ -823,57 +916,63 @@ public class StartGame : MonoBehaviour
         }
     }
 
-    //Reiniciar la partida
-    //!Metodo sin uso
-    public void ResetGame()
-    {   
-        gameState = GameState.PLAYER1;
-        selectedCard = null;
+    // //Reiniciar la partida
+    // //!Metodo sin uso
+    // public void ResetGame()
+    // {   
+    //     gameState = GameState.PLAYER1;
+    //     selectedCard = null;
 
-        vikingsDeck.cards.Clear();
-        lastKingdomDeck.cards.Clear();
+    //     vikingsDeck.cards.Clear();
+    //     lastKingdomDeck.cards.Clear();
 
-        gemsVikingsCount = 2;
-        gemsLastKingdomCount = 2;
+    //     gemsVikingsCount = 2;
+    //     gemsLastKingdomCount = 2;
 
-        gemsVikings.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
-        gemsVikings.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
-        gemsLastKingdom.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
-        gemsLastKingdom.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
+    //     gemsVikings.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
+    //     gemsVikings.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
+    //     gemsLastKingdom.transform.GetChild(0).GetComponent<Image>().sprite = redGem;
+    //     gemsLastKingdom.transform.GetChild(1).GetComponent<Image>().sprite = redGem;
 
-        player1.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
-        player2.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
+    //     player1.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
+    //     player2.transform.Find("Leader").transform.Find("Image").GetComponent<Image>().sprite = leaderImage;
 
-        int n = handVikings.transform.childCount;
-        for (int i = 0; i < n; i++)
-        {
-            handVikings.transform.GetChild(0).parent = null;
-        }
-        n = handLastKingdom.transform.childCount;
-        for (int i = 0; i < n; i++)
-        {
-            handLastKingdom.transform.GetChild(0).parent = null;
-        }
+    //     int n = handVikings.transform.childCount;
+    //     for (int i = 0; i < n; i++)
+    //     {
+    //         handVikings.transform.GetChild(0).parent = null;
+    //     }
+    //     n = handLastKingdom.transform.childCount;
+    //     for (int i = 0; i < n; i++)
+    //     {
+    //         handLastKingdom.transform.GetChild(0).parent = null;
+    //     }
 
-        if(discardVikings.transform.childCount > 0)
-            discardVikings.transform.GetChild(0).parent = null;
-        if(discardLastkingDom.transform.childCount > 0)
-            discardLastkingDom.transform.GetChild(0).parent = null;
+    //     if(discardVikings.transform.childCount > 0)
+    //         discardVikings.transform.GetChild(0).parent = null;
+    //     if(discardLastkingDom.transform.childCount > 0)
+    //         discardLastkingDom.transform.GetChild(0).parent = null;
         
-        UpdateStats();
-        InitGame();
+    //     UpdateStats();
+    //     InitGame();
 
-        menuReset.SetActive(false);
+    //     menuReset.SetActive(false);
         
-    }
+    // }
     
     //Iniciar la partida
     void InitGame()
     {   
         //Incializar cartas creadas
-        for(int i = 0; i < DataManager.myStringList.Count; i++){
-            vikingsDeck.AddCard(DataManager.myStringList[i]);
-            lastKingdomDeck.AddCard(DataManager.myStringList[i]);
+        
+        vikingsDeck = new Deck();
+        
+        lastKingdomDeck = new Deck();
+
+        for(int i = 0; i < DataManager.myStringList.Count; i++)
+        {
+            vikingsDeck.Push(DataManager.myStringList[i]);
+            lastKingdomDeck.Push(DataManager.myStringList[i]);
         }
 
         InitVikingsDeck();
@@ -882,13 +981,15 @@ public class StartGame : MonoBehaviour
         for(int i = 0; i < 10; i++)
         {   
             InstantiateCard(vikingsDeck.cards[i], "Vikings");
-            vikingsDeck.RemoveCard(i);
+            vikingsHand.Push(vikingsDeck.cards[i]);
+            vikingsDeck.Remove(vikingsDeck.cards[i]);
         }
 
         for(int i = 0; i < 10; i++)
         {   
             InstantiateCard(lastKingdomDeck.cards[i], "Last Kingdom");
-            lastKingdomDeck.RemoveCard(i);
+            lastKingdomHand.Push(lastKingdomDeck.cards[i]);
+            lastKingdomDeck.Remove(lastKingdomDeck.cards[i]);
         }
 
     }
@@ -949,6 +1050,12 @@ public class StartGame : MonoBehaviour
     {
         GameObject instantiateCard = Instantiate(cardPrefab);
         instantiateCard.name = card.id.ToString();
+        // Debug.Log(card.description);
+        if(card.description == "Damage") card.effect = 15;
+        if(card.description == "Boost") card.effect = 16;
+        if(card.description == "DrawCard") card.effect = 17;
+        if(card.description == "DrawAndBoost") card.effect = 18;
+        // Debug.Log(card.effect);
         //Stats
         instantiateCard.transform.Find("Stats").GetComponent<CardStats>().name = card.name;
         instantiateCard.transform.Find("Stats").GetComponent<CardStats>().id = card.id;
@@ -958,8 +1065,13 @@ public class StartGame : MonoBehaviour
         instantiateCard.transform.Find("Stats").GetComponent<CardStats>().row = card.row;
         instantiateCard.transform.Find("Stats").GetComponent<CardStats>().effect = card.effect;
 
+
         //Image
-        instantiateCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id);
+        if(card.id <= 49)
+            instantiateCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + card.id);
+        else
+            instantiateCard.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Cards/Small imgs/" + 100);
+
         //Type
         if (card.type == Card.Type.Golden)
         {
@@ -1023,63 +1135,72 @@ public class StartGame : MonoBehaviour
     //Inicializar el mazo Vikings
     void InitVikingsDeck()
     {   
-        vikingsDeck.AddCard(new CardGame("Niebla", 0, "Neutral", Card.Type.Weather, 0, "Clima", 3));
-        vikingsDeck.AddCard(new CardGame("Tormenta Nórdica", 2, "Neutral", Card.Type.Weather, 0, "Clima", 2));
-        vikingsDeck.AddCard(new CardGame("Odin", 4, "Vikings", Card.Type.Boost, 0, "Aumento", 0));
-        vikingsDeck.AddCard(new CardGame("Ivar the Boneless", 5, "Vikings", Card.Type.Golden, 6, "range", 8));
-        vikingsDeck.AddCard(new CardGame("Lagertha, la Guerrera Escudo", 6, "Vikings", Card.Type.Golden, 7, "close_range", 6));
-        vikingsDeck.AddCard(new CardGame("Rollo, el Berserker", 7, "Vikings", Card.Type.Golden, 8, "close", 9));
-        vikingsDeck.AddCard(new CardGame("Thor", 8, "Vikings", Card.Type.Boost, 0, "Aumento", 1));
-        //vikingsDeck.AddCard(new Card("Ragnar Lothbrok", 9, "Vikings", "Lider", 0, "Lider", 5));
-        vikingsDeck.AddCard(new CardGame("Ragnarok", 10, "Vikings", Card.Type.Clear, 0, "all", 4));
-        vikingsDeck.AddCard(new CardGame("Bjorn Ironside", 11, "Vikings", Card.Type.Golden, 6, "close", 7));
-        vikingsDeck.AddCard(new CardGame("Floki, el Constructor", 12, "Vikings", Card.Type.Silver, 4, "close", 10));
-        vikingsDeck.AddCard(new CardGame("Floki, el Constructor", 13, "Vikings", Card.Type.Silver, 4, "close", 10));
-        vikingsDeck.AddCard(new CardGame("Valhalla", 14, "Vikings", Card.Type.Silver, 3, "siege", 11));
-        vikingsDeck.AddCard(new CardGame("Valhalla", 15, "Vikings", Card.Type.Silver, 3, "siege", 11));
-        vikingsDeck.AddCard(new CardGame("Valhalla", 16, "Vikings", Card.Type.Silver, 3, "siege", 11));
-        vikingsDeck.AddCard(new CardGame("Cuervo", 17, "Vikings", Card.Type.Silver, 2, "range", 6));
-        vikingsDeck.AddCard(new CardGame("Cuervo", 18, "Vikings", Card.Type.Silver, 2, "range", 6));
-        vikingsDeck.AddCard(new CardGame("Cuervo", 19, "Vikings", Card.Type.Silver, 2, "range", 6));
-        vikingsDeck.AddCard(new CardGame("Soldado Distractor", 20, "Vikings", Card.Type.Decoy, 0, "Señuelo", 14));
-        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 21, "Vikings", Card.Type.Silver, 1, "siege", 13));
-        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 22, "Vikings", Card.Type.Silver, 1, "siege", 13));
-        vikingsDeck.AddCard(new CardGame("Ariete Nórdico", 23, "Vikings", Card.Type.Silver, 1, "siege", 13));
-        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 24, "Vikings", Card.Type.Silver, 4, "siege", 12));
-        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 25, "Vikings", Card.Type.Silver, 4, "siege", 12));
-        vikingsDeck.AddCard(new CardGame("Catapulta Vikinga", 26, "Vikings", Card.Type.Silver, 4, "siege", 12));
+        deck1 = new List<Card>();
+        deck1.Add(new Unit(5, null, "Ivar the Boneless", Resources.Load<Sprite>("Cards/Small imgs/" + 5), Card.Type.Golden, "description", "Vikings", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 6, "range", 8));
+        deck1.Add(new Unit(6, null, "Lagertha, la Guerrera Escudo", Resources.Load<Sprite>("Cards/Small imgs/" + 6), Card.Type.Golden, "description", "Vikings", new List<Card.Position>(){Card.Position.Melee ,Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 7, "close_range", 6));
+        deck1.Add(new Unit(7, null, "Rollo, el Berserker", Resources.Load<Sprite>("Cards/Small imgs/" + 7), Card.Type.Golden, "description", "Vikings", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 8, "close", 9));
+        deck1.Add(new Unit(11, null, "Bjorn Ironside", Resources.Load<Sprite>("Cards/Small imgs/" + 11), Card.Type.Golden, "description", "Vikings", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 6, "close", 7));
+        deck1.Add(new Unit(12, null, "Floki, el Constructor", Resources.Load<Sprite>("Cards/Small imgs/" + 12), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 10));
+        deck1.Add(new Unit(13, null, "Floki, el Constructor", Resources.Load<Sprite>("Cards/Small imgs/" + 13), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 10));
+        deck1.Add(new Unit(14, null, "Valhalla", Resources.Load<Sprite>("Cards/Small imgs/" + 14), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 11));
+        deck1.Add(new Unit(15, null, "Valhalla", Resources.Load<Sprite>("Cards/Small imgs/" + 15), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 11));
+        deck1.Add(new Unit(16, null, "Valhalla", Resources.Load<Sprite>("Cards/Small imgs/" + 16), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 11));
+        deck1.Add(new Unit(17, null, "Cuervo", Resources.Load<Sprite>("Cards/Small imgs/" + 17), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "range", 6));
+        deck1.Add(new Unit(18, null, "Cuervo", Resources.Load<Sprite>("Cards/Small imgs/" + 18), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "range", 6));
+        deck1.Add(new Unit(19, null, "Cuervo", Resources.Load<Sprite>("Cards/Small imgs/" + 19), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "range", 6));
+        deck1.Add(new Unit(21, null, "Ariete Nórdico", Resources.Load<Sprite>("Cards/Small imgs/" + 21), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 1, "siege", 13));
+        deck1.Add(new Unit(22, null, "Ariete Nórdico", Resources.Load<Sprite>("Cards/Small imgs/" + 22), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 1, "siege", 13));
+        deck1.Add(new Unit(23, null, "Ariete Nórdico", Resources.Load<Sprite>("Cards/Small imgs/" + 23), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 1, "siege", 13));
+        deck1.Add(new Unit(24, null, "Ariete Nórdico", Resources.Load<Sprite>("Cards/Small imgs/" + 24), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 4, "siege", 12));
+        deck1.Add(new Unit(25, null, "Ariete Nórdico", Resources.Load<Sprite>("Cards/Small imgs/" + 25), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 4, "siege", 12));
+        deck1.Add(new Unit(26, null, "Catapulta Vikinga", Resources.Load<Sprite>("Cards/Small imgs/" + 26), Card.Type.Silver, "description", "Vikings", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 4, "siege", 12));
+        deck1.Add(new Clear(10, null, "Ragnarok", Resources.Load<Sprite>("Cards/Small imgs/" + 10), Card.Type.Clear, "description", "Vikings", new List<Card.Position>(){Card.Position.All}, new Onactivation(new List<EffectActivation>()), 0, "all", 4));
+        deck1.Add(new Weather(0, null, "Niebla", Resources.Load<Sprite>("Cards/Small imgs/" + 0), Card.Type.Weather, "description", "Neutral", new List<Card.Position>(){Card.Position.Weather}, new Onactivation(new List<EffectActivation>()), 0, "Clima", 3));
+        deck1.Add(new Weather(2, null, "Tormenta Nórdica", Resources.Load<Sprite>("Cards/Small imgs/" + 2), Card.Type.Weather, "description", "Neutral", new List<Card.Position>(){Card.Position.Weather}, new Onactivation(new List<EffectActivation>()), 0, "Clima", 2));
+        deck1.Add(new Boost(4, null, "Odin", Resources.Load<Sprite>("Cards/Small imgs/" + 4), Card.Type.Boost, "description", "Vikings", new List<Card.Position>(){Card.Position.Boost}, new Onactivation(new List<EffectActivation>()), 0, "Aumento", 0));
+        deck1.Add(new Boost(8, null, "Thor", Resources.Load<Sprite>("Cards/Small imgs/" + 8), Card.Type.Boost, "description", "Vikings", new List<Card.Position>(){Card.Position.Boost}, new Onactivation(new List<EffectActivation>()), 0, "Aumento", 1));
+        deck1.Add(new Decoy(20, null, "Soldado Distractor", Resources.Load<Sprite>("Cards/Small imgs/" + 20), Card.Type.Decoy, "description", "Neutral", new List<Card.Position>(){Card.Position.All}, new Onactivation(new List<EffectActivation>()), 0, "all", 14));
+        //vikingsDeck.Add(new Card("Ragnar Lothbrok", 9, "Vikings", "Lider", 0, "Lider", 5));
         //Desordenar mazo
+        foreach(Card card in deck1){
+            vikingsDeck.Push(card);
+        }
         vikingsDeck.Shuffle();
     }
 
     //Inicializar el mazo Last Kingdom
     void InitLastKingdomDeck()
-    {
-        lastKingdomDeck.AddCard(new CardGame("Niebla", 1, "Neutral", Card.Type.Weather, 0, "Clima", 3));
-        lastKingdomDeck.AddCard(new CardGame("Tormenta Nórdica", 3, "Neutral", Card.Type.Weather, 0, "Clima", 2));
-        //lastKingdomDeck.AddCard(new Card("Uhtred de Bebbanburg", 27, "Last Kingdom", "Lider", 0, "Lider", 8));
-        lastKingdomDeck.AddCard(new CardGame("Alfred el Grande", 28, "Last Kingdom", Card.Type.Golden, 8, "close_range", 9));
-        lastKingdomDeck.AddCard(new CardGame("Aethelflaed", 29, "Last Kingdom", Card.Type.Golden, 7, "close_range", 5));
-        lastKingdomDeck.AddCard(new CardGame("Beocca", 30, "Last Kingdom", Card.Type.Boost, 0, "Aumento", 0));
-        lastKingdomDeck.AddCard(new CardGame("Dios Cristiano", 31, "Last Kingdom", Card.Type.Boost, 0, "Aumento", 1));
-        lastKingdomDeck.AddCard(new CardGame("Iglesia Cristiana de Wessex", 32, "Last Kingdom", Card.Type.Clear, 0, "all", 4));
-        lastKingdomDeck.AddCard(new CardGame("Leofric", 33, "Last Kingdom", Card.Type.Golden, 6, "close", 6));
-        lastKingdomDeck.AddCard(new CardGame("Finan", 34, "Last Kingdom", Card.Type.Golden, 6, "close", 7));
-        lastKingdomDeck.AddCard(new CardGame("Sihtric", 35, "Last Kingdom", Card.Type.Silver, 4, "close", 10));
-        lastKingdomDeck.AddCard(new CardGame("Sihtric", 36, "Last Kingdom", Card.Type.Silver, 4, "close", 10));
-        lastKingdomDeck.AddCard(new CardGame("Steapa", 37, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
-        lastKingdomDeck.AddCard(new CardGame("Steapa", 38, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
-        lastKingdomDeck.AddCard(new CardGame("Steapa", 39, "Last Kingdom", Card.Type.Silver, 4, "close", 11));
-        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 40, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
-        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 41, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
-        lastKingdomDeck.AddCard(new CardGame("Sigtryggr & Stiorra", 42, "Last Kingdom", Card.Type.Silver, 2, "close_range", 6));
-        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 43, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
-        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 44, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
-        lastKingdomDeck.AddCard(new CardGame("Ballesta Gigante", 45, "Last Kingdom", Card.Type.Silver, 3, "siege", 12));
-        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 46, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
-        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 47, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
-        lastKingdomDeck.AddCard(new CardGame("Aluvión de Flechas", 48, "Last Kingdom", Card.Type.Silver, 1, "range", 13));
-        lastKingdomDeck.AddCard(new CardGame("Halcón Mensajero", 49, "Last Kingdom", Card.Type.Decoy, 0, "Señuelo", 14));
+    {   
+        deck2 = new List<Card>();
+        deck2.Add(new Weather(1, null, "Niebla", Resources.Load<Sprite>("Cards/Small imgs/" + 1), Card.Type.Weather, "description", "Neutral", new List<Card.Position>(){Card.Position.Weather}, new Onactivation(new List<EffectActivation>()), 0, "Clima", 3));
+        deck2.Add(new Weather(3, null, "Tormenta Nórdica", Resources.Load<Sprite>("Cards/Small imgs/" + 3), Card.Type.Weather, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Weather}, new Onactivation(new List<EffectActivation>()), 0, "Clima", 2));
+        deck2.Add(new Unit(28, null, "Alfred el Grande", Resources.Load<Sprite>("Cards/Small imgs/" + 28), Card.Type.Golden, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee, Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 8, "close_range", 9));
+        deck2.Add(new Unit(29, null, "Aethelflaed", Resources.Load<Sprite>("Cards/Small imgs/" + 29), Card.Type.Golden, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee, Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 5, "close_range", 5));
+        deck2.Add(new Boost(30, null, "Beocca", Resources.Load<Sprite>("Cards/Small imgs/" + 30), Card.Type.Boost, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Boost}, new Onactivation(new List<EffectActivation>()), 0, "Aumento", 0));
+        deck2.Add(new Boost(31, null, "Dios Cristiano", Resources.Load<Sprite>("Cards/Small imgs/" + 31), Card.Type.Boost, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Boost}, new Onactivation(new List<EffectActivation>()), 0, "Aumento", 1));
+        deck2.Add(new Clear(32, null, "Iglesia Cristiana de Wessex", Resources.Load<Sprite>("Cards/Small imgs/" + 32), Card.Type.Clear, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.All}, new Onactivation(new List<EffectActivation>()), 0, "all", 4));
+        deck2.Add(new Unit(33, null, "Leofric", Resources.Load<Sprite>("Cards/Small imgs/" + 33), Card.Type.Golden, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.All}, new Onactivation(new List<EffectActivation>()), 6, "all", 6));
+        deck2.Add(new Unit(34, null, "Finan", Resources.Load<Sprite>("Cards/Small imgs/" + 34), Card.Type.Golden, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 6, "close", 7));
+        deck2.Add(new Unit(35, null, "Sihtric", Resources.Load<Sprite>("Cards/Small imgs/" + 35), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 10));
+        deck2.Add(new Unit(36, null, "Sihtric", Resources.Load<Sprite>("Cards/Small imgs/" + 36), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 10));
+        deck2.Add(new Unit(37, null, "Steapa", Resources.Load<Sprite>("Cards/Small imgs/" + 37), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 11));
+        deck2.Add(new Unit(38, null, "Steapa", Resources.Load<Sprite>("Cards/Small imgs/" + 38), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 11));
+        deck2.Add(new Unit(39, null, "Steapa", Resources.Load<Sprite>("Cards/Small imgs/" + 39), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee}, new Onactivation(new List<EffectActivation>()), 4, "close", 11));
+        deck2.Add(new Unit(40, null, "Sigtryggr & Stiorra", Resources.Load<Sprite>("Cards/Small imgs/" + 40), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee, Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "close_range", 6));
+        deck2.Add(new Unit(41, null, "Sigtryggr & Stiorra", Resources.Load<Sprite>("Cards/Small imgs/" + 41), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee, Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "close_range", 6));
+        deck2.Add(new Unit(42, null, "Sigtryggr & Stiorra", Resources.Load<Sprite>("Cards/Small imgs/" + 42), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Melee, Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 2, "close_range", 6));
+        deck2.Add(new Unit(43, null, "Ballesta Gigante", Resources.Load<Sprite>("Cards/Small imgs/" + 43), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 12));
+        deck2.Add(new Unit(44, null, "Ballesta Gigante", Resources.Load<Sprite>("Cards/Small imgs/" + 44), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 12));
+        deck2.Add(new Unit(45, null, "Ballesta Gigante", Resources.Load<Sprite>("Cards/Small imgs/" + 45), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Siege}, new Onactivation(new List<EffectActivation>()), 3, "siege", 12));
+        deck2.Add(new Unit(46, null, "Aluvión de Flechas", Resources.Load<Sprite>("Cards/Small imgs/" + 46), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 1, "range", 13));
+        deck2.Add(new Unit(47, null, "Aluvión de Flechas", Resources.Load<Sprite>("Cards/Small imgs/" + 47), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 1, "range", 13));
+        deck2.Add(new Unit(48, null, "Aluvión de Flechas", Resources.Load<Sprite>("Cards/Small imgs/" + 48), Card.Type.Silver, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.Ranged}, new Onactivation(new List<EffectActivation>()), 1, "range", 13));
+        deck2.Add(new Decoy(49, null, "Halcón Mensajero", Resources.Load<Sprite>("Cards/Small imgs/" + 49), Card.Type.Decoy, "description", "Last Kingdom", new List<Card.Position>(){Card.Position.All}, new Onactivation(new List<EffectActivation>()), 0, "all", 14));
+        
+        foreach(Card card in deck2){
+            lastKingdomDeck.Push(card);
+        }
+        //lastKingdomDeck.Add(new Card("Uhtred de Bebbanburg", 27, "Last Kingdom", "Lider", 0, "Lider", 8));
         //Desordenar mazo
         lastKingdomDeck.Shuffle();
     }

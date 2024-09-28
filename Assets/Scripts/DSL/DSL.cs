@@ -40,6 +40,12 @@ public static class DSL
         Lexer lexer = new Lexer(code);
 
         var tokens = lexer.GetTokens();
+
+        // foreach (var token in tokens)
+        // {
+        //     // Debug.Log(token);
+        // }
+
         if(hasError)
         {
             BreakCompilation();
@@ -66,52 +72,44 @@ public static class DSL
         foreach(var effect in nodes.nodes.Where(n => n is EffectDefinition).Select(n => (EffectDefinition)n)) {
             
             GlobalEffects.effects[effect.name] = effect;
+            
         }
 
         foreach(var card in nodes.nodes.Where(n => n is CardNode).Select(n => (CardNode)n)){
-            //Debug.Log(card.name + ", id, " +  card.faction + ", " + Tools.GetCardTypeString(card.type) + ", " + (int)card.power + ", efecto");
-
-            List<Card.Position> rows = Tools.GetCardPositions(card.position);      
-            bool melee = false;
-            foreach(Card.Position pos in rows){
-                if(pos == Card.Position.Melee) melee = true;
-                // Debug.Log(pos);
+            Card newcard = null;
+            switch(card.type){
+                case Card.Type.Silver:
+                case Card.Type.Golden:
+                    newcard = new Unit(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, (int)card.power, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
+                case Card.Type.Decoy:
+                    newcard = new Decoy(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, 0, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
+                case Card.Type.Boost:
+                    newcard = new Boost(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, 0, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
+                case Card.Type.Weather:
+                    newcard = new Weather(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, 0, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
+                case Card.Type.Leader:
+                    newcard = new Leader(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, 0, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
+                case Card.Type.Clear:
+                    newcard = new Clear(50 + DataManager.myStringList.Count, null, card.name, Resources.Load<Sprite>("DefaultImage"), card.type, card.activation.activations[0].effect.definition, card.faction, Tools.GetCardPositions(card.position), card.activation, 0, Tools.GetCardRow(Tools.GetCardPositions(card.position)), 100);
+                    break;
             }
-            bool ranged = false;
-            foreach(Card.Position pos in rows){
-                if(pos == Card.Position.Ranged) ranged = true;
-                // Debug.Log(pos);
+            if(card.activation.activations[0].effect.definition != "DrawCard"){
+                if(card.activation.activations[0].effect.parameters.parameters.Count > 0)
+                {
+                    int x = (int)card.activation.activations[0].effect.parameters.parameters["Amount"];
+                    DataManager.myAmountList[card.activation.activations[0].effect.definition] = x;
+                }
             }
-            bool siege = false;
-            foreach(Card.Position pos in rows){
-                if(pos == Card.Position.Siege) siege = true;
-                // Debug.Log(pos);
-            }
-            string row = "";
-            if(melee && ranged && siege) {
-                row = "all";
-            }else if(melee && ranged){
-                row = "close_range";
-            }else if(melee && siege){
-                row = "close_siege";
-            }else if(ranged && siege){
-                row = "range_siege";
-            }else if(melee){
-                row = "close";
-            }else if(ranged){
-                row = "range";
-            }else if(siege){
-                row = "siege";
-            }
-        
-        // lastKingdomDeck.AddCard(new CardGame(card.name, 100, card.faction, card.type, (int)card.power, , 100));
-        // vikingsDeck.AddCard(new CardGame(card.name, 100, card.faction, card.type, (int)card.power, , 100));
-        // controller.CreatedCards.AddCard(new CardGame(card.name, 100, card.faction, card.type, (int)card.power, row, 100));
-        DataManager.myStringList.Add(new CardGame(card.name, 100, card.faction, card.type, (int)card.power, row, 15));
-        // CardGame(nombre, id, faction, Card.Type.Decoy, 0, "Señuelo", 14)
-        
+            DataManager.myStringList.Add(newcard);
         }
-    } 
+    }
+
+    
     public static void Report(int line, int column, string where, string message)
     {
         Debug.LogError($"[Line {line}, Column {column}] {where} Error: " + message);

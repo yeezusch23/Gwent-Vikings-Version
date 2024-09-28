@@ -1,0 +1,55 @@
+//Reducir Puntos
+effect {
+    Name: "Damage",
+    Params: {
+        Amount: Number
+    },
+    Action: (targets, context) => {
+        for (target in targets) {
+            i = 0;
+            while (i++ < Amount)
+                target.Power -= 1;
+        }
+    }
+}
+
+//Aumenta puntos
+effect {
+    Name: "Boost",
+    Params: {
+        Amount: Number
+    },
+    Action: (targets, context) => {
+        for (target in targets) {
+            i = 0;
+            while (i++ < Amount)
+                target.Power += 1;
+        }
+    }
+}
+
+//Robar Carta
+effect {
+    Name: "DrawCard",
+    Action: (targets, context) => {
+        topCard = context.Deck.Pop();
+        context.Hand.Push(topCard);
+    }
+}
+
+// Robar y Aumentar
+effect {
+    Name: "DrawAndBoost",
+    Params: {
+        Amount: Number
+    },
+    Action: (targets, context) => {
+        for (target in targets) {
+            i = 0;
+            while (i++ < Amount)
+                target.Power += 1;
+        }
+        topCard = context.Deck.Pop();
+        context.Hand.Push(topCard);
+    }
+}

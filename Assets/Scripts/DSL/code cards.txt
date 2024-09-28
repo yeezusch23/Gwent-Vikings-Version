@@ -1,0 +1,69 @@
+
+
+card {
+    Type: "Oro",
+    Name: "Beluga",
+    Faction: "Northern Realms", 
+    Power: 10,
+    Range: ["Melee"],   
+    OnActivation: [
+        {
+            Effect: {
+                Name: "Damage", // este efecto tiene que estar previamente definido.
+                Amount: 5, // ... y tener estos parámetros.
+            },
+            Selector: {
+                Source: "board", // o "hand", "otherHand", "deck", "otherDeck", "field", "otherField", "parent".
+                Single: false, // aunque por defecto es false.
+                Predicate: (unit) => unit.Faction == "Northern" @@ "Realms"
+            },
+        }
+    ]
+}
+
+card {
+    Type: "Plata",
+    Name: "Freydis",
+    Faction: "Vikings", 
+    Power: 5,
+    Range: ["Melee", "Ranged"],   
+    OnActivation: [
+        {
+            Effect: {
+                Name: "Boost", // este efecto tiene que estar previamente definido.
+                Amount: 10, // ... y tener estos parámetros.
+            },
+        }
+    ]
+}
+
+card {
+    Type: "Plata",
+    Name: "Gunnhild",
+    Faction: "Vikings", 
+    Power: 2,
+    Range: ["Siege", "Ranged"],   
+    OnActivation: [
+        {
+            Effect: {
+                Name: "DrawCard", // este efecto tiene que estar previamente definido.
+            },
+        }
+    ]
+}
+
+card {
+    Type: "Oro",
+    Name: "Athelstan",
+    Faction: "Vikings", 
+    Power: 9,
+    Range: ["Melee"],   
+    OnActivation: [
+        {
+            Effect: {
+                Name: "DrawAndBoost", // este efecto tiene que estar previamente definido.
+                Amount: 1, // ... y tener estos parámetros.
+            },
+        }
+    ]
+}

@@ -17,7 +17,7 @@ public class Context : IASTNode
 
     public Player triggerplayer;
     public Context scope;
-    public Dictionary<string, object> variables;
+    public Dictionary<string, object> variables = new Dictionary<string, object>();
 
     // obtener variables del context
     public object Get(Token key)
@@ -27,7 +27,6 @@ public class Context : IASTNode
             return variables[key.lexeme];
         }
         if (scope != null) return scope.Get(key);
-        //TODO: Hacer que imprima el error en la consola
         throw new Exception("variable was not found context");
     }
 

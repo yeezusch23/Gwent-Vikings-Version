@@ -15,8 +15,7 @@ public static class Tools
             case "Aumento": return Card.Type.Boost;
             case "Líder": return Card.Type.Leader;
             case "Señuelo": return Card.Type.Decoy;
-            case "Despeje": return Card.Type.Clear;
-            default: return Card.Type.Null;
+            default: return Card.Type.Clear;
         }
     }    
 
@@ -63,4 +62,42 @@ public static class Tools
         }
         return result;
     }
+
+    public static string GetCardRow(List<Card.Position> rows){
+                  
+            bool melee = false;
+            foreach(Card.Position pos in rows){
+                if(pos == Card.Position.Melee) melee = true;
+                // Debug.Log(pos);
+            }
+            bool ranged = false;
+            foreach(Card.Position pos in rows){
+                if(pos == Card.Position.Ranged) ranged = true;
+                // Debug.Log(pos);
+            }
+            bool siege = false;
+            foreach(Card.Position pos in rows){
+                if(pos == Card.Position.Siege) siege = true;
+                // Debug.Log(pos);
+            }
+            string row = "";
+            if(melee && ranged && siege) {
+                row = "all";
+            }else if(melee && ranged){
+                row = "close_range";
+            }else if(melee && siege){
+                row = "close_siege";
+            }else if(ranged && siege){
+                row = "range_siege";
+            }else if(melee){
+                row = "close";
+            }else if(ranged){
+                row = "range";
+            }else if(siege){
+                row = "siege";
+            }
+            return row;
+    }
+
+    
 }

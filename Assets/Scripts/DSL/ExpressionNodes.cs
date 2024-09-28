@@ -301,12 +301,14 @@ public class ListFind : List
         object card = 0;
         List<Card> result = new List<Card>();
         bool usedvariable = false;
+        Debug.Log(context.variables);
         if (context.variables.ContainsKey(parameter.lexeme))
-        {
+        {   
+            Debug.Log("Entra");
             card = context.variables[parameter.lexeme];
             usedvariable = true;
         }
-
+        
         // Evalúa el predicado de cada carta de la lista
         foreach (Card listcard in (List<Card>)list.Evaluate(context, targets))
         {
@@ -643,7 +645,7 @@ public class Onactivation : IASTNode
     public List<EffectActivation> activations;
 
     public void Execute(Player triggerplayer)
-    {
+    {   
         foreach (EffectActivation activation in activations)
         {
             activation.Execute(triggerplayer);
@@ -661,7 +663,8 @@ public class EffectActivation : IASTNode
     public EffectActivation postAction;
 
     public void Execute(Player triggerplayer)
-    {
+    {   
+        
         if(selector != null){
             switch (selector.source.literal)
             {
@@ -675,8 +678,8 @@ public class EffectActivation : IASTNode
                 case "field": selector.filtre.list = new FieldList(null,new Literal(triggerplayer), null, null); break;
                 case "otherField": selector.filtre.list = new FieldList(null,new Literal(triggerplayer.Other()), null, null); break;
             }
-            if (postAction.selector == null) postAction.selector = selector;
-            else if ((string)postAction.selector.source.literal == "parent") postAction.selector.filtre.list = selector.filtre;
+            // if (postAction.selector == null) postAction.selector = selector;
+            // else if ((string)postAction.selector.source.literal == "parent") postAction.selector.filtre.list = selector.filtre;
             var temp = selector.Select(triggerplayer);
             if ((bool)selector.single && temp.Count > 0)
             {
@@ -687,7 +690,7 @@ public class EffectActivation : IASTNode
         }
         else GlobalEffects.effects[effect.definition].action.targets=new List<Card>();
         effect.Execute(triggerplayer);
-        postAction.Execute(triggerplayer);
+        // postAction.Execute(triggerplayer);
     }
 }
 
